@@ -1,7 +1,8 @@
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
-  const state = { brand: 'dh', theme: 'dark', article: 0, signedIn: false, method: 'mobile', dismissed: false, revealed: false };
+  const FREE_LIMIT = 3; // number of free articles before the wall (supports 1–6+)
+  const state = { brand: 'dh', theme: 'dark', version: 'v1', article: 0, signedIn: false, method: 'mobile', dismissed: false, revealed: false };
   const headlines = [
     'Tendulkar-Anderson Trophy: New-look Team India ready for the big test',
     'Shubman Gill to lead with a plan: a new chapter for Indian cricket',
@@ -21,13 +22,14 @@
       nav_home: 'Home', nav_india: 'India', nav_karnataka: 'Karnataka', nav_opinion: 'Opinion', nav_sports: 'Sports', nav_business: 'Business', nav_ent: 'Entertainment',
       login: 'Log in', my_account: 'My account ✓', email: 'Email',
       counter_tail: 'Log in for unlimited access', counter_close: 'Dismiss article counter',
-      counter_last: 'Your last free article', counter_n: '{n} of 3 free articles',
+      counter_left: 'free articles left', counter_left1: 'free article left',
       crumbs: 'Home › Sports › <b>Cricket</b>',
       deck: 'A new captain. A new generation. India’s young squad looks ahead to its next chapter.',
       byline: 'By Sidney Kiran &nbsp;·&nbsp; Updated 03 Nov 2026, 09:38 IST',
       hero_label: 'THE NEXT INNINGS', hero_cap: 'CRICKET · INDIA IN ENGLAND',
       free_account: 'FREE ACCOUNT', wall_title: 'There’s more to the story.',
-      wall_lede: 'You’ve read your 3 free articles. Enter your mobile number to keep reading {brand} — free.',
+      wall_lede: 'You’ve read your {n} free articles. Enter your mobile number to keep reading {brand} — free.',
+      wall_lede_login: 'You’ve read your {n} free articles. Log in to keep reading {brand} — free.',
       mobile_number: 'Mobile number', ph_mobile: 'Enter mobile number', err_phone: 'Enter a valid 10-digit mobile number',
       send_otp_arrow: 'Send OTP', send_otp: 'Send OTP', already_member: 'Already a member?',
       wall_hint: 'We’ll text a one-time code — no password, no spam.',
@@ -52,7 +54,8 @@
       otp_sent: 'Enter the 6-digit code sent to', edit: 'Edit', err_otp: 'Incorrect code. Try 123456 in this demo.',
       verify: 'Verify & Continue', resend_q: 'Didn’t get a code?', resend_in: 'Resend in {s}s', resend_code: 'Resend code',
       demo_otp: 'Prototype only · No code is sent. Use <b>123456</b>.',
-      terms: 'By continuing, you agree to our <a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy Policy</a>, and to receive occasional account and offer updates from us.',
+      consent: 'I agree to receive marketing and promotional updates.',
+      terms: 'By continuing, you agree to our <a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy Policy</a>.',
       foot: '<b>Your Login, Simplified</b> &nbsp;·&nbsp; One account for DH &amp; Prajavani',
       close_login: 'Close login',
       toast_login: 'You’re logged in. Keep exploring, it’s free.', toast_resent: 'A new code has been sent.'
@@ -62,13 +65,14 @@
       nav_home: 'ಮುಖಪುಟ', nav_india: 'ಭಾರತ', nav_karnataka: 'ಕರ್ನಾಟಕ', nav_opinion: 'ಅಭಿಪ್ರಾಯ', nav_sports: 'ಕ್ರೀಡೆ', nav_business: 'ವಾಣಿಜ್ಯ', nav_ent: 'ಮನರಂಜನೆ',
       login: 'ಲಾಗಿನ್', my_account: 'ನನ್ನ ಖಾತೆ ✓', email: 'ಇಮೇಲ್',
       counter_tail: 'ಅನಿಯಮಿತ ಓದಿಗೆ ಲಾಗಿನ್ ಮಾಡಿ', counter_close: 'ಲೇಖನ ಎಣಿಕೆ ಮುಚ್ಚಿ',
-      counter_last: 'ನಿಮ್ಮ ಕೊನೆಯ ಉಚಿತ ಲೇಖನ', counter_n: 'ಉಚಿತ ಲೇಖನ {n}/3',
+      counter_left: 'ಉಚಿತ ಲೇಖನಗಳು ಉಳಿದಿವೆ', counter_left1: 'ಉಚಿತ ಲೇಖನ ಉಳಿದಿದೆ',
       crumbs: 'ಮುಖಪುಟ › ಕ್ರೀಡೆ › <b>ಕ್ರಿಕೆಟ್</b>',
       deck: 'ಹೊಸ ನಾಯಕ. ಹೊಸ ಪೀಳಿಗೆ. ಭಾರತದ ಯುವ ತಂಡ ಮುಂದಿನ ಅಧ್ಯಾಯದತ್ತ ದೃಷ್ಟಿ ನೆಟ್ಟಿದೆ.',
       byline: 'ಸಿಡ್ನಿ ಕಿರಣ್ ಅವರಿಂದ &nbsp;·&nbsp; ನವೀಕರಣ 03 ನವೆಂ 2026, 09:38 IST',
       hero_label: 'ಮುಂದಿನ ಇನ್ನಿಂಗ್ಸ್', hero_cap: 'ಕ್ರಿಕೆಟ್ · ಇಂಗ್ಲೆಂಡ್‌ನಲ್ಲಿ ಭಾರತ',
       free_account: 'ಉಚಿತ ಖಾತೆ', wall_title: 'ಕಥೆಯಲ್ಲಿ ಇನ್ನಷ್ಟಿದೆ.',
-      wall_lede: 'ನೀವು ನಿಮ್ಮ 3 ಉಚಿತ ಲೇಖನಗಳನ್ನು ಓದಿದ್ದೀರಿ. {brand} ಓದುವುದನ್ನು ಮುಂದುವರಿಸಲು ನಿಮ್ಮ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ — ಉಚಿತ.',
+      wall_lede: 'ನೀವು ನಿಮ್ಮ {n} ಉಚಿತ ಲೇಖನಗಳನ್ನು ಓದಿದ್ದೀರಿ. {brand} ಓದುವುದನ್ನು ಮುಂದುವರಿಸಲು ನಿಮ್ಮ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ — ಉಚಿತ.',
+      wall_lede_login: 'ನೀವು ನಿಮ್ಮ {n} ಉಚಿತ ಲೇಖನಗಳನ್ನು ಓದಿದ್ದೀರಿ. {brand} ಓದುವುದನ್ನು ಮುಂದುವರಿಸಲು ಲಾಗಿನ್ ಮಾಡಿ — ಉಚಿತ.',
       mobile_number: 'ಮೊಬೈಲ್ ಸಂಖ್ಯೆ', ph_mobile: 'ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ', err_phone: 'ಮಾನ್ಯವಾದ 10-ಅಂಕಿಯ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ',
       send_otp_arrow: 'OTP ಕಳುಹಿಸಿ', send_otp: 'OTP ಕಳುಹಿಸಿ', already_member: 'ಈಗಾಗಲೇ ಸದಸ್ಯರೇ?',
       wall_hint: 'ಒಂದು-ಬಾರಿಯ ಕೋಡ್ ಕಳುಹಿಸುತ್ತೇವೆ — ಪಾಸ್‌ವರ್ಡ್ ಇಲ್ಲ, ಸ್ಪ್ಯಾಮ್ ಇಲ್ಲ.',
@@ -93,7 +97,8 @@
       otp_sent: 'ಈ ಸಂಖ್ಯೆಗೆ ಕಳುಹಿಸಿದ 6-ಅಂಕಿಯ ಕೋಡ್ ನಮೂದಿಸಿ', edit: 'ಬದಲಿಸಿ', err_otp: 'ತಪ್ಪು ಕೋಡ್. ಈ ಡೆಮೊದಲ್ಲಿ 123456 ಬಳಸಿ.',
       verify: 'ಪರಿಶೀಲಿಸಿ ಮತ್ತು ಮುಂದುವರಿಯಿರಿ', resend_q: 'ಕೋಡ್ ಸಿಗಲಿಲ್ಲವೇ?', resend_in: '{s} ಸೆ.ನಲ್ಲಿ ಮರುಕಳುಹಿಸಿ', resend_code: 'ಕೋಡ್ ಮರುಕಳುಹಿಸಿ',
       demo_otp: 'ಪ್ರೊಟೊಟೈಪ್ ಮಾತ್ರ · ಯಾವ ಕೋಡ್ ಕಳುಹಿಸಲಾಗಿಲ್ಲ. <b>123456</b> ಬಳಸಿ.',
-      terms: 'ಮುಂದುವರಿಯುವ ಮೂಲಕ, ನೀವು ನಮ್ಮ <a href="#">ನಿಯಮಗಳು ಮತ್ತು ಷರತ್ತುಗಳು</a> ಹಾಗೂ <a href="#">ಗೌಪ್ಯತಾ ನೀತಿ</a>ಗೆ ಒಪ್ಪುತ್ತೀರಿ, ಮತ್ತು ಕಾಲಕಾಲಕ್ಕೆ ಖಾತೆ ಹಾಗೂ ಕೊಡುಗೆ ಅಪ್‌ಡೇಟ್‌ಗಳನ್ನು ಪಡೆಯಲು ಸಮ್ಮತಿಸುತ್ತೀರಿ.',
+      consent: 'ಮಾರ್ಕೆಟಿಂಗ್ ಮತ್ತು ಪ್ರಚಾರ ಸಂದೇಶಗಳನ್ನು ಸ್ವೀಕರಿಸಲು ನಾನು ಒಪ್ಪುತ್ತೇನೆ.',
+      terms: 'ಮುಂದುವರಿಯುವ ಮೂಲಕ, ನೀವು ನಮ್ಮ <a href="#">ನಿಯಮಗಳು ಮತ್ತು ಷರತ್ತುಗಳು</a> ಹಾಗೂ <a href="#">ಗೌಪ್ಯತಾ ನೀತಿ</a>ಗೆ ಒಪ್ಪುತ್ತೀರಿ.',
       foot: '<b>ನಿಮ್ಮ ಲಾಗಿನ್, ಸರಳಗೊಳಿಸಲಾಗಿದೆ</b> &nbsp;·&nbsp; DH ಮತ್ತು ಪ್ರಜಾವಾಣಿಗೆ ಒಂದೇ ಖಾತೆ',
       close_login: 'ಲಾಗಿನ್ ಮುಚ್ಚಿ',
       toast_login: 'ನೀವು ಲಾಗಿನ್ ಆಗಿದ್ದೀರಿ. ಓದುವುದನ್ನು ಮುಂದುವರಿಸಿ, ಉಚಿತ.', toast_resent: 'ಹೊಸ ಕೋಡ್ ಕಳುಹಿಸಲಾಗಿದೆ.'
@@ -108,12 +113,19 @@
     document.querySelectorAll('[data-i18n-aria]').forEach(el => { const v = d[el.dataset.i18nAria]; if (v != null) el.setAttribute('aria-label', v); });
   }
   let timer, toastTimer, opener;
-  const locked = () => !state.signedIn && state.article >= 3;
+  const locked = () => !state.signedIn && state.article >= FREE_LIMIT;
   function render() {
     const pv = state.brand === 'pv';
     const d = L();
     document.body.dataset.brand = state.brand;
     document.body.dataset.theme = state.theme;
+    $('articleWall').dataset.version = state.version;
+    document.querySelectorAll('#versionSeg button').forEach(b => {
+      const selected = b.dataset.version === state.version;
+      b.classList.toggle('on', selected);
+      b.setAttribute('aria-pressed', String(selected));
+    });
+    $('wallLogin').hidden = state.version === 'v1';
     document.documentElement.lang = pv ? 'kn' : 'en';
     document.querySelectorAll('#themeSeg button').forEach(b => b.classList.toggle('on', b.dataset.theme === state.theme));
     applyI18n();
@@ -137,17 +149,17 @@
     $('splashSince').textContent = d.since;
     $('splashStatement').textContent = d.statement;
     $('splashStatementSub').textContent = d.statement_sub;
-    $('wallLede').textContent = d.wall_lede.replace('{brand}', d.brand_name);
+    $('wallLede').textContent = (state.version === 'v1' ? d.wall_lede : d.wall_lede_login).replace('{brand}', d.brand_name).replace('{n}', FREE_LIMIT);
     $('perkList').innerHTML = d.perks.map(p => `<li><span aria-hidden="true">✓</span><span>${p}</span></li>`).join('');
     $('relatedGrid').innerHTML = (pv ? kannadaHeadlines : headlines).slice(1).map(h => `<button class="rel-card" data-next="1"><div class="thumb"></div><div class="t">${h}</div></button>`).join('');
     $('headerLogin').textContent = state.signedIn ? d.my_account : d.login;
     $('headerLogin').disabled = state.signedIn;
-    const left = Math.max(2 - state.article, 0);
-    $('counterCopy').textContent = left === 0 ? d.counter_last : d.counter_n.replace('{n}', state.article + 1);
-    $('counterBar').classList.toggle('last', left === 0);
+    const remaining = Math.max(FREE_LIMIT - state.article, 0);
+    $('counterNum').textContent = remaining;
+    $('counterCopy').textContent = remaining === 1 ? d.counter_left1 : d.counter_left;
+    $('counterBar').classList.toggle('last', remaining === 1);
     $('counterBar').classList.toggle('hide', state.signedIn || locked() || state.dismissed || !state.revealed);
-    $('counterProgress').innerHTML = [0, 1, 2].map(i => `<i class="${i <= state.article ? 'used' : ''}"></i>`).join('');
-    $('stageLabel').textContent = state.signedIn ? 'Signed in · Full access' : locked() ? 'Login required · Article 4' : `Guest · Article ${state.article + 1} of 3`;
+    $('stageLabel').textContent = state.signedIn ? 'Signed in · Full access' : locked() ? `Login required · Article ${FREE_LIMIT + 1}` : `Guest · Article ${state.article + 1} of ${FREE_LIMIT}`;
     $('fadeLock').classList.toggle('locked', locked());
     $('articleWall').classList.toggle('grid-hidden', !locked());
     $('nextBtn').textContent = locked() ? d.next_locked : d.next_read;
@@ -205,9 +217,10 @@
   }
   $('brandSeg').onclick = e => { const b = e.target.closest('[data-brand]'); if (b) { state.brand = b.dataset.brand; render(); } };
   $('themeSeg').onclick = e => { const b = e.target.closest('[data-theme]'); if (b) { state.theme = b.dataset.theme; render(); } };
+  $('versionSeg').onclick = e => { const b = e.target.closest('[data-version]'); if (b) { state.version = b.dataset.version; render(); } };
   $('nextBtn').onclick = next;
   $('relatedGrid').onclick = e => { if (e.target.closest('[data-next]')) next(); };
-  ['counterLogin', 'headerLogin', 'nudgeLogin'].forEach(id => $(id).onclick = login);
+  ['counterLogin', 'headerLogin', 'nudgeLogin', 'wallLogin'].forEach(id => $(id).onclick = login);
   // Inline phone capture on the article-4 wall -> opens the focused modal straight on the OTP step.
   function openOtpStep(method, value, target) {
     state.method = method;
@@ -282,7 +295,7 @@
   $('verifyOtp').onclick = verify;
   $('googleBtn').onclick = success;
   function prefillDemo() { $('phoneInput').value = '9876543210'; $('emailInput').value = 'reader@example.com'; $('wallPhone').value = '9876543210'; } // demo: prefilled so the flow is click-through
-  $('resetBtn').onclick = () => { state.article = 0; state.signedIn = false; state.dismissed = false; hideDialogs(); setMethod('mobile'); prefillDemo(); $('toast').classList.remove('show'); window.scrollTo({ top: 0 }); armReveal(); render(); };
+  $('resetBtn').onclick = () => { state.article = 0; state.signedIn = false; state.dismissed = false; hideDialogs(); setMethod('mobile'); prefillDemo(); document.querySelectorAll('.js-consent').forEach(c => c.checked = true); $('toast').classList.remove('show'); window.scrollTo({ top: 0 }); armReveal(); render(); };
   document.addEventListener('keydown', e => {
     if ((e.key === 'Enter' || e.key === ' ') && e.target.matches?.('a[role="button"]')) { e.preventDefault(); e.target.click(); return; }
     const dialog = document.querySelector('.overlay.show');

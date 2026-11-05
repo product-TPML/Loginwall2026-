@@ -235,7 +235,7 @@
   .login .foot { background: linear-gradient(#f4f5f6, #fff); border-top: 1px solid var(--line); text-align: center; padding: 14px; font-size: 12.5px; color: var(--muted); }
   .login .foot b { color: var(--ink-2); font-weight: 600; }
 
-  .sheet-close { position: absolute; top: 12px; right: 14px; border: 0; background: rgba(0,0,0,.06); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px; color: #333; z-index: 5; }
+  .sheet-close { position: absolute; top: 12px; right: 14px; border: 0; background: #fff; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px; color: #111; z-index: 5; box-shadow: 0 1px 5px rgba(0,0,0,.25); }
   .login { position: relative; }
 
   /* success toast */
@@ -285,6 +285,11 @@
       <button data-theme="dark" class="on">Dark</button>
       <button data-theme="light">Light</button>
     </div>
+    <div class="seg" id="versionSeg" role="group" aria-label="Inline login wall version">
+      <button data-version="v1" class="on" aria-pressed="true" title="Mobile number and benefits">V1</button>
+      <button data-version="v2" aria-pressed="false" title="Login button and benefits">V2</button>
+      <button data-version="v3" aria-pressed="false" title="Login button without benefits">V3</button>
+    </div>
     <button class="reset" id="resetBtn">↻ Restart</button><span class="stage-label" id="stageLabel"></span>
   </div>
 
@@ -302,10 +307,10 @@
   </header>
 
   <div class="counter" id="counterBar">
-    <div class="counter-meter" id="counterProgress" aria-hidden="true"></div>
+    <div class="counter-num" id="counterNum" aria-hidden="true">3</div>
     <div class="counter-text">
       <strong id="counterCopy"></strong>
-      <span class="counter-sub" data-i18n="counter_tail">Unlimited access, always free.</span>
+      <span class="counter-sub" data-i18n="counter_tail">Log in for unlimited access</span>
     </div>
     <a id="counterLogin" class="counter-cta" role="button" tabindex="0" data-i18n="login">Log in</a>
     <button class="x" id="counterClose" aria-label="Dismiss article counter" data-i18n-aria="counter_close">×</button>
@@ -381,6 +386,7 @@
         <img class="wall-logo" id="wallLogo" alt="" />
         <h2 id="wallTitle" data-i18n="wall_title">There’s more to the story.</h2>
         <p class="lede" id="wallLede"></p>
+        <button class="btn-primary" id="wallLogin" data-i18n="login" hidden>Log in</button>
         <div class="wall-form">
           <label class="field-label" for="wallPhone" data-i18n="mobile_number">Mobile number</label>
           <div class="phone-row" id="wallPhoneRow">
@@ -391,8 +397,21 @@
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#d33" stroke-width="2"/><path d="M12 7v6" stroke="#d33" stroke-width="2"/><circle cx="12" cy="16.5" r="1" fill="#d33"/></svg>
             <span data-i18n="err_phone">Enter a valid 10-digit mobile number</span>
           </div>
+          <label class="consent"><input type="checkbox" class="js-consent" checked /> <span data-i18n="consent">I agree to receive marketing and promotional updates.</span></label>
           <button class="btn-primary" id="wallSendOtp" data-i18n="send_otp_arrow">Send OTP</button>
-          <p class="wall-alt"><span data-i18n="already_member">Already a member?</span> <a id="nudgeLogin" role="button" tabindex="0" data-i18n="login">Log in</a> <span class="sep">·</span> <a id="wallGoogle" role="button" tabindex="0">Google</a> <span class="sep">·</span> <a id="wallEmail" role="button" tabindex="0" data-i18n="email">Email</a></p>
+          <p class="wall-alt"><span data-i18n="already_member">Already a member?</span> <a id="nudgeLogin" role="button" tabindex="0" data-i18n="login">Log in</a></p>
+          <div class="or"><span data-i18n="other_ways">other ways to log in</span></div>
+          <div class="socials">
+            <button class="soc-btn" id="wallGoogle">
+              <svg viewBox="0 0 24 24"><path d="M23.766 12.276c0-.816-.066-1.636-.207-2.438H12.24v4.62h6.482a5.54 5.54 0 0 1-2.399 3.64v2.999h3.867c2.27-2.09 3.576-5.177 3.576-8.82Z" fill="#4285F4"/><path d="M12.24 24c3.236 0 5.966-1.062 7.955-2.897l-3.868-2.998c-1.075.732-2.464 1.146-4.083 1.146-3.13 0-5.785-2.112-6.737-4.952H1.516v3.091A12 12 0 0 0 12.24 24Z" fill="#34A853"/><path d="M5.503 14.3a7.19 7.19 0 0 1 0-4.595V6.615H1.516a12.01 12.01 0 0 0 0 10.776L5.503 14.3Z" fill="#FBBC04"/><path d="M12.24 4.75a6.52 6.52 0 0 1 4.603 1.799l3.426-3.426A11.54 11.54 0 0 0 12.24 0 12 12 0 0 0 1.516 6.615L5.503 9.706C6.45 6.862 9.109 4.75 12.24 4.75Z" fill="#EA4335"/></svg>
+              Google
+            </button>
+            <span class="secondary-divider" aria-hidden="true"></span>
+            <button class="soc-btn" id="wallEmail">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2.5" stroke="currentColor" stroke-width="2"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="2"/></svg>
+              <span data-i18n="email">Email</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -409,7 +428,7 @@
   <!-- LOGIN MODAL -->
   <div class="overlay" id="loginOverlay">
     <div class="login" role="dialog" aria-modal="true" aria-labelledby="authTitle">
-      <button class="sheet-close" id="loginClose" aria-label="Close login" data-i18n-aria="close_login">✕</button>
+      <button class="sheet-close" id="loginClose" aria-label="Close login" data-i18n-aria="close_login"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg></button>
 
       <!-- Splash -->
       <div class="splash">
@@ -456,6 +475,7 @@
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#d33" stroke-width="2"/><path d="M12 7v6" stroke="#d33" stroke-width="2"/><circle cx="12" cy="16.5" r="1" fill="#d33"/></svg>
                 <span data-i18n="err_phone">Enter a valid 10-digit mobile number</span>
               </div>
+              <label class="consent"><input type="checkbox" class="js-consent" checked /> <span data-i18n="consent">I agree to receive marketing and promotional updates.</span></label>
               <button class="continue" id="sendOtp" data-i18n="send_otp">Send OTP</button>
               <div class="hint" data-i18n="otp_hint">We'll text you a 6-digit code to verify your number.</div>
             </div>
@@ -468,6 +488,7 @@
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#d33" stroke-width="2"/><path d="M12 7v6" stroke="#d33" stroke-width="2"/><circle cx="12" cy="16.5" r="1" fill="#d33"/></svg>
                 <span data-i18n="err_email">Enter a valid email address</span>
               </div>
+              <label class="consent"><input type="checkbox" class="js-consent" checked /> <span data-i18n="consent">I agree to receive marketing and promotional updates.</span></label>
               <button class="continue" id="emailContinue" data-i18n="send_code">Send verification code</button>
             </div>
 
