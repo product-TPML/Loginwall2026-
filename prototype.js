@@ -171,6 +171,44 @@
       paragraph.hidden = locked() && index > 0;
     });
   }
+  // Mobile keyboards resize the visual viewport, while fixed overlays can remain
+  // anchored to the full page. Keep the sheet inside the unobscured area.
+  let viewportHeight = window.innerHeight, viewportWidth = window.innerWidth;
+  let viewportFrame;
+  function updateLoginViewport() {
+    const overlay = $('loginOverlay');
+    const viewport = window.visualViewport;
+    const mobile = matchMedia('(max-width: 720px)').matches;
+    if (window.innerWidth !== viewportWidth) {
+      viewportWidth = window.innerWidth;
+      viewportHeight = window.innerHeight;
+    } else viewportHeight = Math.max(viewportHeight, window.innerHeight);
+    const height = viewport?.height || window.innerHeight;
+    overlay.style.setProperty('--login-viewport-height', `${height}px`);
+    overlay.style.setProperty('--login-viewport-top', `${viewport?.offsetTop || 0}px`);
+    const keyboardOpen = mobile && overlay.classList.contains('show') &&
+      (!viewport || viewport.scale === 1) && viewportHeight - height > 120;
+    overlay.classList.toggle('keyboard-open', keyboardOpen);
+    cancelAnimationFrame(viewportFrame);
+    viewportFrame = requestAnimationFrame(() => {
+      if (!keyboardOpen || $('stepOtp').classList.contains('grid-hidden')) return;
+      const sheet = overlay.querySelector('.login');
+      if (!sheet.classList.contains('sheet-in')) return;
+      const bounds = sheet.getBoundingClientRect();
+      const fields = $('otpBoxes').getBoundingClientRect();
+      const button = $('verifyOtp').getBoundingClientRect();
+      // Scroll the sheet itself, keeping the OTP fields and action together.
+      const bottom = Math.min(bounds.bottom, (viewport?.offsetTop || 0) + height) - 12;
+      const top = Math.max(bounds.top, viewport?.offsetTop || 0) + 12;
+      if (button.bottom > bottom) sheet.scrollTop += Math.min(button.bottom - bottom, Math.max(0, fields.top - top));
+      else if (fields.top < top) sheet.scrollTop -= top - fields.top;
+    });
+  }
+  window.visualViewport?.addEventListener('resize', updateLoginViewport);
+  window.visualViewport?.addEventListener('scroll', updateLoginViewport);
+  window.addEventListener('resize', updateLoginViewport);
+  $('loginOverlay').addEventListener('focusin', updateLoginViewport);
+  $('loginOverlay').querySelector('.login').addEventListener('transitionend', updateLoginViewport);
   function hideDialogs(restore = false) {
     document.querySelectorAll('.overlay').forEach(el => el.classList.remove('show'));
     document.querySelectorAll('.login').forEach(el => { el.classList.remove('sheet-in'); el.style.transform = ''; el.style.transition = ''; });
@@ -178,11 +216,13 @@
     document.querySelector('main').inert = false;
     clearInterval(timer);
     if (restore && opener?.isConnected) opener.focus();
+    updateLoginViewport();
   }
   function show(id, initialFocus) {
     hideDialogs();
     opener = document.activeElement;
     $(id).classList.add('show');
+    updateLoginViewport();
     document.body.style.overflow = 'hidden';
     document.querySelector('main').inert = true;
     // Mobile sheet: slide up smoothly. Lay it off-screen, let the browser settle, then transition in.
@@ -299,6 +339,7 @@
     clearCode();
     '123456'.split('').forEach((d, i) => { inputs[i].value = d; }); // demo: pre-fill code (set directly so auto-verify doesn't fire)
     countdown(); inputs[0].focus({ preventScroll: true }); inputs[0].select();
+    updateLoginViewport();
   }
   $('phoneInput').oninput = e => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10); $('phoneErr').classList.remove('show'); $('phoneRow').classList.remove('err'); };
   $('sendOtp').onclick = () => {
