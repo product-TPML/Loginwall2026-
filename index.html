@@ -271,7 +271,7 @@
     .nudge .handle { background: #d6dbe0; margin-top: -8px; margin-bottom: 14px; }
   }
 </style>
-<link rel="stylesheet" href="prototype.css?v=20261106-3" />
+<link rel="stylesheet" href="prototype.css?v=20261106-4" />
 </head>
 <body data-brand="dh" data-theme="dark">
 
@@ -516,7 +516,7 @@
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#d33" stroke-width="2"/><path d="M12 7v6" stroke="#d33" stroke-width="2"/><circle cx="12" cy="16.5" r="1" fill="#d33"/></svg>
               <span data-i18n="err_otp">Incorrect code. Try 123456 in this demo.</span>
             </div>
-            <button class="continue" id="verifyOtp" data-i18n="verify">Verify &amp; Continue</button>
+            <div id="otpActionSlot"><button class="continue" id="verifyOtp" data-i18n="verify">Verify &amp; Continue</button></div>
             <div class="resend"><span data-i18n="resend_q">Didn’t get a code?</span> <button class="soc-btn" id="resendLink" disabled>Resend in 30s</button></div>
           </div>
 
@@ -524,6 +524,7 @@
         </div>
         <div class="foot" data-i18n-html="foot"><b>Your Login, Simplified</b> &nbsp;·&nbsp; One account for DH &amp; Prajavani</div>
       </div>
+      <div class="otp-action-dock" id="otpActionDock"></div>
     </div>
   </div>
 
@@ -532,6 +533,6 @@
     <span id="toastMsg">You're logged in. Enjoy unlimited access!</span>
   </div>
 
-<script src="prototype.js?v=20261106-3"></script>
+<script src="prototype.js?v=20261106-4"></script>
 </body>
 </html>

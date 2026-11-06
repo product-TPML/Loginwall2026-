@@ -174,7 +174,7 @@
   // Mobile keyboards resize the visual viewport, while fixed overlays can remain
   // anchored to the full page. Keep the sheet inside the unobscured area.
   let viewportHeight = window.innerHeight, viewportWidth = window.innerWidth;
-  let viewportFrame;
+  let viewportFrame, otpSheetScroll = 0;
   function updateLoginViewport() {
     const overlay = $('loginOverlay');
     const viewport = window.visualViewport;
@@ -189,18 +189,26 @@
     const keyboardOpen = mobile && overlay.classList.contains('show') &&
       (!viewport || viewport.scale === 1) && viewportHeight - height > 120;
     overlay.classList.toggle('keyboard-open', keyboardOpen);
+    const sheet = overlay.querySelector('.login');
+    const pinAction = keyboardOpen && !$('stepOtp').classList.contains('grid-hidden');
+    const wasPinned = overlay.classList.contains('otp-action-pinned');
+    if (pinAction !== wasPinned) {
+      if (pinAction) otpSheetScroll = sheet.scrollTop;
+      (pinAction ? $('otpActionDock') : $('otpActionSlot')).append($('verifyOtp'));
+      overlay.classList.toggle('otp-action-pinned', pinAction);
+      if (!pinAction) sheet.scrollTop = otpSheetScroll;
+    }
     cancelAnimationFrame(viewportFrame);
     viewportFrame = requestAnimationFrame(() => {
-      if (!keyboardOpen || $('stepOtp').classList.contains('grid-hidden')) return;
-      const sheet = overlay.querySelector('.login');
+      if (!pinAction) return;
       if (!sheet.classList.contains('sheet-in')) return;
       const bounds = sheet.getBoundingClientRect();
       const fields = $('otpBoxes').getBoundingClientRect();
-      const button = $('verifyOtp').getBoundingClientRect();
-      // Scroll the sheet itself, keeping the OTP fields and action together.
-      const bottom = Math.min(bounds.bottom, (viewport?.offsetTop || 0) + height) - 12;
+      // Keep the original header in the scrollable sheet. Only the action is
+      // pinned; bring the code fields into the space above it.
+      const bottom = Math.min($('otpActionDock').getBoundingClientRect().top, bounds.bottom) - 12;
       const top = Math.max(bounds.top, viewport?.offsetTop || 0) + 12;
-      if (button.bottom > bottom) sheet.scrollTop += Math.min(button.bottom - bottom, Math.max(0, fields.top - top));
+      if (fields.bottom > bottom) sheet.scrollTop += Math.min(fields.bottom - bottom, Math.max(0, fields.top - top));
       else if (fields.top < top) sheet.scrollTop -= top - fields.top;
     });
   }

@@ -66,6 +66,7 @@ h1.title { font-size: 39px; line-height: 1.25; letter-spacing: -.8px; }
 .next-btn { border-radius: 5px; }
 .overlay { background: #111e2c85; backdrop-filter: blur(3px); overflow-y: auto; }
 .sheet-close { display: inline-flex; align-items: center; justify-content: center; background: transparent; box-shadow: none; }
+.otp-action-dock { display: none; }
 .login { max-width: 850px; grid-template-columns: .85fr 1fr; border-radius: 14px; min-height: 528px; }
 body[data-brand="pv"] .login { min-height: 564px; } /* Kannada copy wraps taller */
 .login .splash { min-height: 430px; align-items: flex-start; padding: 36px; justify-content: space-between; background-color: var(--brand-dark); overflow: hidden; }
@@ -248,18 +249,9 @@ body[data-brand="pv"] .inline-wall[data-version="v2"] .illo-back img { width: 96
   .login.sheet-in { transform: translateY(0); }
   #loginOverlay .login { max-height: min(92dvh, var(--login-viewport-height, 92dvh)); }
   body[data-brand="pv"] .login { min-height: 0; }
-  .keyboard-open .login { padding-bottom: 0; }
-  .keyboard-open .login .splash { min-height: 44px; padding: 12px 22px; }
-  .keyboard-open .login .splash .blogo,
-  .keyboard-open .login .splash-statement,
-  .keyboard-open .login .auth-intro,
-  .keyboard-open .login .terms,
-  .keyboard-open .login .foot { display: none; }
   .keyboard-open .login .panel { overflow: visible; }
-  .keyboard-open .login .panel .scroll { padding: 12px 22px; }
-  .keyboard-open .login:has(#stepOtp:not(.grid-hidden)) .ptitle { display: none; }
-  .keyboard-open .otp-sub { margin: 0 0 8px; }
-  .keyboard-open .resend { margin-top: 8px; }
+  .otp-action-pinned .otp-action-dock { display: block; position: sticky; bottom: 0; z-index: 6; padding: 12px 22px; background: #fff; border-top: 1px solid var(--border); }
+  .otp-action-pinned .otp-action-dock .continue { margin-top: 0; }
   /* mobile: taller heritage band for the image animation */
   .login .splash { display: flex; min-height: 184px; flex-direction: column; justify-content: center; align-items: flex-start; gap: 7px; padding: 18px 24px; background-position: center; touch-action: none; cursor: grab; }
   .login .splash .handle { position: absolute; left: 50%; top: 9px; transform: translateX(-50%); margin: 0; z-index: 2; }
