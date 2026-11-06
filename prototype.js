@@ -113,6 +113,7 @@
     document.querySelectorAll('[data-i18n-aria]').forEach(el => { const v = d[el.dataset.i18nAria]; if (v != null) el.setAttribute('aria-label', v); });
   }
   let timer, toastTimer, opener;
+  const pendingActions = new Map();
   const locked = () => !state.signedIn && state.article >= FREE_LIMIT;
   function render() {
     const pv = state.brand === 'pv';
@@ -226,6 +227,7 @@
     }
   });
   function hideDialogs(restore = false) {
+    cancelPendingActions();
     const page = loginPage;
     const restorePage = document.body.classList.contains('login-scroll-locked');
     cancelAnimationFrame(viewportFrame);
@@ -263,12 +265,27 @@
     requestAnimationFrame(() => (initialFocus || $(id).querySelector('input:not([hidden]), button')).focus({ preventScroll: true }));
   }
   // Simulated network latency so submit actions show a spinner (and block double-taps).
+  function cancelPendingActions() {
+    pendingActions.forEach((timeout, btn) => {
+      clearTimeout(timeout);
+      btn.classList.remove('btn-loading');
+      btn.disabled = false;
+    });
+    pendingActions.clear();
+  }
   function withBusy(btn, done) {
     if (btn.classList.contains('btn-loading')) return;
     btn.classList.add('btn-loading'); btn.disabled = true;
-    setTimeout(() => { btn.classList.remove('btn-loading'); btn.disabled = false; done(); }, 900);
+    const timeout = setTimeout(() => {
+      if (pendingActions.get(btn) !== timeout) return;
+      pendingActions.delete(btn);
+      btn.classList.remove('btn-loading'); btn.disabled = false;
+      done();
+    }, 900);
+    pendingActions.set(btn, timeout);
   }
   function setMethod(method) {
+    cancelPendingActions();
     state.method = method;
     $('mobilePane').classList.toggle('grid-hidden', method !== 'mobile');
     $('emailPane').classList.toggle('grid-hidden', method !== 'email');
@@ -398,7 +415,15 @@
   $('resendLink').onclick = () => { clearCode(); countdown(); inputs[0].focus(); toast(L().toast_resent); };
   function toast(message) { $('toastMsg').textContent = message; $('toast').classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => $('toast').classList.remove('show'), 4000); }
   function success() { state.signedIn = true; hideDialogs(true); render(); toast(L().toast_login); }
-  function verify() { if (inputs.map(i => i.value).join('') === '123456') withBusy($('verifyOtp'), success); else { $('otpErr').classList.add('show'); clearCode(); inputs[0].focus(); } }
+  function verify() {
+    if (inputs.map(i => i.value).join('') === '123456') withBusy($('verifyOtp'), success);
+    else {
+      clearCode();
+      $('otpErr').classList.add('show');
+      inputs[0].focus({ preventScroll: true });
+      updateLoginViewport(true);
+    }
+  }
   $('verifyOtp').onclick = verify;
   $('googleBtn').onclick = success;
   function prefillDemo() { $('phoneInput').value = '9876543210'; $('emailInput').value = 'reader@example.com'; $('wallPhone').value = '9876543210'; } // demo: prefilled so the flow is click-through

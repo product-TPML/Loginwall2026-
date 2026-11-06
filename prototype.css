@@ -67,6 +67,11 @@ h1.title { font-size: 39px; line-height: 1.25; letter-spacing: -.8px; }
 .overlay { background: #111e2c85; backdrop-filter: blur(3px); overflow-y: auto; }
 .sheet-close { display: inline-flex; align-items: center; justify-content: center; background: transparent; box-shadow: none; }
 .login { max-width: 850px; grid-template-columns: .85fr 1fr; border-radius: 14px; min-height: 528px; }
+/* Center when there is room; keep the top reachable in short/landscape windows. */
+@media (min-width: 721px) {
+  #loginOverlay { align-items: flex-start; }
+  #loginOverlay .login { margin-block: auto; flex-shrink: 0; }
+}
 body[data-brand="pv"] .login { min-height: 564px; } /* Kannada copy wraps taller */
 .login .splash { min-height: 430px; align-items: flex-start; padding: 36px; justify-content: space-between; background-color: var(--brand-dark); overflow: hidden; }
 /* crossfading heritage photos */
