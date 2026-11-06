@@ -243,12 +243,13 @@ body[data-brand="pv"] .inline-wall[data-version="v2"] .illo-back img { width: 96
   /* mobile sheet: smooth slide-up over a softly fading backdrop (no blur = no jank) */
   html.login-scroll-locked { overflow: hidden; overscroll-behavior: none; }
   body.login-scroll-locked { position: fixed; top: var(--login-scroll-offset, 0px); left: 0; right: 0; overflow: hidden; }
-  #loginOverlay { position: fixed; inset: 0; overflow: clip; background: rgba(12,18,26,.55); backdrop-filter: none; -webkit-backdrop-filter: none; overscroll-behavior: none; }
+  #loginOverlay { position: fixed; top: var(--login-viewport-top, 0px); bottom: auto; height: var(--login-viewport-height, 100dvh); flex-direction: column; align-items: stretch; justify-content: flex-start; overflow: clip; background: rgba(12,18,26,.55); backdrop-filter: none; -webkit-backdrop-filter: none; overscroll-behavior: none; }
+  #loginOverlay.scroll-ready { overflow-y: auto; }
   .overlay.show { animation: backdropIn .3s ease both; }
   @keyframes backdropIn { from { opacity: 0; } to { opacity: 1; } }
   .login { display: block; min-height: auto; max-height: none; border-radius: 20px 20px 0 0; border-top: 1px solid #fff; box-shadow: 0 -10px 44px rgba(0,0,0,.5); padding-bottom: env(safe-area-inset-bottom); will-change: transform; transform: translateY(100%); transition: transform .42s cubic-bezier(.25,.46,.45,.94); }
-  .login.sheet-in { transform: translateY(calc(-1 * var(--login-keyboard-lift, 0px))); }
-  #loginOverlay .login { max-height: none; overflow: clip; }
+  .login.sheet-in { transform: translateY(0); }
+  #loginOverlay .login { flex: 0 0 auto; margin-top: auto; max-height: none; overflow: clip; }
   body[data-brand="pv"] .login { min-height: 0; }
   .login .panel { overflow: visible; }
   /* mobile: taller heritage band for the image animation */
