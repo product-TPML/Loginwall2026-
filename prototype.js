@@ -120,12 +120,13 @@
     document.body.dataset.brand = state.brand;
     document.body.dataset.theme = state.theme;
     $('articleWall').dataset.version = state.version;
+    const formVersion = state.version === 'v1' || state.version === 'v4'; // mobile-form versions
     document.querySelectorAll('#versionSeg button').forEach(b => {
       const selected = b.dataset.version === state.version;
       b.classList.toggle('on', selected);
       b.setAttribute('aria-pressed', String(selected));
     });
-    $('wallLogin').hidden = state.version === 'v1';
+    $('wallLogin').hidden = formVersion;
     document.documentElement.lang = pv ? 'kn' : 'en';
     document.querySelectorAll('#themeSeg button').forEach(b => b.classList.toggle('on', b.dataset.theme === state.theme));
     applyI18n();
@@ -149,7 +150,7 @@
     $('splashSince').textContent = d.since;
     $('splashStatement').textContent = d.statement;
     $('splashStatementSub').textContent = d.statement_sub;
-    $('wallLede').textContent = (state.version === 'v1' ? d.wall_lede : d.wall_lede_login).replace('{brand}', d.brand_name).replace('{n}', FREE_LIMIT);
+    $('wallLede').textContent = (formVersion ? d.wall_lede : d.wall_lede_login).replace('{brand}', d.brand_name).replace('{n}', FREE_LIMIT);
     $('perkList').innerHTML = d.perks.map(p => `<li><span aria-hidden="true">✓</span><span>${p}</span></li>`).join('');
     $('relatedGrid').innerHTML = (pv ? kannadaHeadlines : headlines).slice(1).map(h => `<button class="rel-card" data-next="1"><div class="thumb"></div><div class="t">${h}</div></button>`).join('');
     $('headerLogin').textContent = state.signedIn ? d.my_account : d.login;
@@ -172,18 +173,23 @@
   }
   function hideDialogs(restore = false) {
     document.querySelectorAll('.overlay').forEach(el => el.classList.remove('show'));
+    document.querySelectorAll('.login').forEach(el => { el.classList.remove('sheet-in'); el.style.transform = ''; el.style.transition = ''; });
     document.body.style.overflow = '';
     document.querySelector('main').inert = false;
     clearInterval(timer);
     if (restore && opener?.isConnected) opener.focus();
   }
-  function show(id) {
+  function show(id, initialFocus) {
     hideDialogs();
     opener = document.activeElement;
     $(id).classList.add('show');
     document.body.style.overflow = 'hidden';
     document.querySelector('main').inert = true;
-    requestAnimationFrame(() => $(id).querySelector('input:not([hidden]), button').focus());
+    // Mobile sheet: slide up smoothly. Lay it off-screen, let the browser settle, then transition in.
+    const sheet = $(id).querySelector('.login');
+    if (sheet) { void sheet.offsetHeight; requestAnimationFrame(() => requestAnimationFrame(() => sheet.classList.add('sheet-in'))); }
+    // Focusing an off-screen sheet must not scroll its overlay into view early.
+    requestAnimationFrame(() => (initialFocus || $(id).querySelector('input:not([hidden]), button')).focus({ preventScroll: true }));
   }
   // Simulated network latency so submit actions show a spinner (and block double-taps).
   function withBusy(btn, done) {
@@ -226,7 +232,7 @@
     state.method = method;
     $(method === 'mobile' ? 'phoneInput' : 'emailInput').value = value;
     setMethod(method);
-    show('loginOverlay');
+    show('loginOverlay', inputs[0]);
     otp(target);
   }
   $('wallPhone').oninput = e => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10); $('wallPhoneErr').classList.remove('show'); $('wallPhoneRow').classList.remove('err'); };
@@ -243,6 +249,35 @@
   $('counterClose').onclick = () => { state.dismissed = true; render(); };
   $('loginClose').onclick = closeLogin;
   $('loginOverlay').onclick = e => { if (e.target === $('loginOverlay')) closeLogin(); };
+  // Mobile bottom-sheet: drag the heritage band / handle down to dismiss.
+  (() => {
+    const sheet = document.querySelector('.login');
+    const grip = sheet.querySelector('.splash');
+    let startY = null, dy = 0;
+    const mobile = () => matchMedia('(max-width: 720px)').matches;
+    grip.addEventListener('pointerdown', e => {
+      if (!mobile()) return;
+      startY = e.clientY; dy = 0;
+      sheet.style.transition = 'none';
+      grip.setPointerCapture(e.pointerId);
+    });
+    grip.addEventListener('pointermove', e => {
+      if (startY === null) return;
+      dy = Math.max(0, e.clientY - startY);
+      sheet.style.transform = `translateY(${dy}px)`;
+    });
+    const end = () => {
+      if (startY === null) return;
+      const close = dy > 110;
+      sheet.style.transition = 'transform .28s cubic-bezier(.3,.8,.35,1)';
+      sheet.style.transform = close ? 'translateY(100%)' : 'translateY(0)';
+      if (close) setTimeout(() => { sheet.style.transition = ''; sheet.style.transform = ''; closeLogin(); }, 260);
+      else setTimeout(() => { sheet.style.transition = ''; sheet.style.transform = ''; }, 280);
+      startY = null;
+    };
+    grip.addEventListener('pointerup', end);
+    grip.addEventListener('pointercancel', end);
+  })();
   $('emailOption').onclick = () => { setMethod('email'); $('emailInput').focus(); };
   $('mobileSwitch').onclick = () => { setMethod('mobile'); $('phoneInput').focus(); };
   const inputs = [...$('otpBoxes').querySelectorAll('input')];
@@ -263,7 +298,7 @@
     $('authIntro').textContent = L().auth_intro_otp;
     clearCode();
     '123456'.split('').forEach((d, i) => { inputs[i].value = d; }); // demo: pre-fill code (set directly so auto-verify doesn't fire)
-    countdown(); inputs[0].focus(); inputs[0].select();
+    countdown(); inputs[0].focus({ preventScroll: true }); inputs[0].select();
   }
   $('phoneInput').oninput = e => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10); $('phoneErr').classList.remove('show'); $('phoneRow').classList.remove('err'); };
   $('sendOtp').onclick = () => {
@@ -310,10 +345,9 @@
     }
   });
   // Counter appears on first scroll (engaged reader), with a time fallback for non-scrollers.
-  let revealTimer;
-  function revealCounter() { if (state.revealed) return; state.revealed = true; window.removeEventListener('scroll', onScroll); clearTimeout(revealTimer); render(); }
+  function revealCounter() { if (state.revealed) return; state.revealed = true; window.removeEventListener('scroll', onScroll); render(); }
   function onScroll() { if (window.scrollY > 420) revealCounter(); }
-  function armReveal() { state.revealed = false; window.removeEventListener('scroll', onScroll); clearTimeout(revealTimer); window.addEventListener('scroll', onScroll, { passive: true }); revealTimer = setTimeout(revealCounter, 5000); }
+  function armReveal() { state.revealed = false; window.removeEventListener('scroll', onScroll); window.addEventListener('scroll', onScroll, { passive: true }); }
   prefillDemo();
   armReveal();
   render();

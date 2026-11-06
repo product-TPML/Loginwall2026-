@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Login Wall Prototype — Deccan Herald / Prajavani</title>
 <link rel="preload" as="image" href="assets/heritage/building.jpg" />
+<link rel="preload" as="image" href="assets/heritage/founder.jpg" />
 <link rel="preload" as="image" href="assets/heritage/floor.jpg" />
 <link rel="preload" as="image" href="assets/heritage/crowd.jpg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -270,7 +271,7 @@
     .nudge .handle { background: #d6dbe0; margin-top: -8px; margin-bottom: 14px; }
   }
 </style>
-<link rel="stylesheet" href="prototype.css?v=20261105-2" />
+<link rel="stylesheet" href="prototype.css?v=20261106-2" />
 </head>
 <body data-brand="dh" data-theme="dark">
 
@@ -289,6 +290,7 @@
       <button data-version="v1" class="on" aria-pressed="true" title="Mobile number and benefits">V1</button>
       <button data-version="v2" aria-pressed="false" title="Login button and benefits">V2</button>
       <button data-version="v3" aria-pressed="false" title="Login button without benefits">V3</button>
+      <button data-version="v4" aria-pressed="false" title="Mobile number without benefits">V4</button>
     </div>
     <button class="reset" id="resetBtn">↻ Restart</button><span class="stage-label" id="stageLabel"></span>
   </div>
@@ -434,6 +436,7 @@
       <div class="splash">
         <div class="splash-photos" aria-hidden="true">
           <div class="sp-img sp-building"></div>
+          <div class="sp-img sp-founder"></div>
           <div class="sp-img sp-floor"></div>
           <div class="sp-img sp-crowd"></div>
         </div>
@@ -529,6 +532,6 @@
     <span id="toastMsg">You're logged in. Enjoy unlimited access!</span>
   </div>
 
-<script src="prototype.js?v=20261105-2"></script>
+<script src="prototype.js?v=20261106-1"></script>
 </body>
 </html>
