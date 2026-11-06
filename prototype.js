@@ -171,11 +171,11 @@
       paragraph.hidden = locked() && index > 0;
     });
   }
-  // Mobile keyboards resize the visual viewport, while fixed overlays can remain
-  // anchored to the full page. Keep the sheet inside the unobscured area.
+  // Mobile uses document scrolling: the whole dialog keeps its natural layout
+  // and moves with the page, including when the keyboard covers the screen.
   let viewportHeight = window.innerHeight, viewportWidth = window.innerWidth;
-  let viewportFrame, otpSheetScroll = 0;
-  function updateLoginViewport() {
+  let viewportFrame, loginPage;
+  function updateLoginViewport(ensureVisible = false) {
     const overlay = $('loginOverlay');
     const viewport = window.visualViewport;
     const mobile = matchMedia('(max-width: 720px)').matches;
@@ -184,54 +184,65 @@
       viewportHeight = window.innerHeight;
     } else viewportHeight = Math.max(viewportHeight, window.innerHeight);
     const height = viewport?.height || window.innerHeight;
-    overlay.style.setProperty('--login-viewport-height', `${height}px`);
-    overlay.style.setProperty('--login-viewport-top', `${viewport?.offsetTop || 0}px`);
-    const keyboardOpen = mobile && overlay.classList.contains('show') &&
-      (!viewport || viewport.scale === 1) && viewportHeight - height > 120;
-    overlay.classList.toggle('keyboard-open', keyboardOpen);
-    const sheet = overlay.querySelector('.login');
-    const pinAction = keyboardOpen && !$('stepOtp').classList.contains('grid-hidden');
-    const wasPinned = overlay.classList.contains('otp-action-pinned');
-    if (pinAction !== wasPinned) {
-      if (pinAction) otpSheetScroll = sheet.scrollTop;
-      (pinAction ? $('otpActionDock') : $('otpActionSlot')).append($('verifyOtp'));
-      overlay.classList.toggle('otp-action-pinned', pinAction);
-      if (!pinAction) sheet.scrollTop = otpSheetScroll;
+    const pageOpen = mobile && overlay.classList.contains('show') && loginPage;
+    document.body.classList.toggle('login-page-open', !!pageOpen);
+    if (!loginPage) return;
+    document.body.style.overflow = mobile ? '' : 'hidden';
+    if (!pageOpen) {
+      document.body.style.minHeight = loginPage.minHeight;
+      return;
     }
+    overlay.style.setProperty('--login-page-top', `${loginPage.scroll}px`);
+    overlay.style.setProperty('--login-page-height', `${viewportHeight}px`);
+    const keyboardHeight = Math.max(0, viewportHeight - height);
+    // Leave document space below the complete dialog so it can scroll above
+    // the keyboard without creating a scroll container inside the dialog.
+    document.body.style.minHeight = `${Math.max(loginPage.documentHeight, loginPage.scroll + overlay.offsetHeight + keyboardHeight + 16)}px`;
+    if (ensureVisible !== true) return;
     cancelAnimationFrame(viewportFrame);
     viewportFrame = requestAnimationFrame(() => {
-      if (!pinAction) return;
+      if (!loginPage || !overlay.classList.contains('show') || keyboardHeight <= 120 || viewport?.scale > 1) return;
+      const sheet = overlay.querySelector('.login');
       if (!sheet.classList.contains('sheet-in')) return;
-      const bounds = sheet.getBoundingClientRect();
-      const fields = $('otpBoxes').getBoundingClientRect();
-      // Keep the original header in the scrollable sheet. Only the action is
-      // pinned; bring the code fields into the space above it.
-      const bottom = Math.min($('otpActionDock').getBoundingClientRect().top, bounds.bottom) - 12;
-      const top = Math.max(bounds.top, viewport?.offsetTop || 0) + 12;
-      if (fields.bottom > bottom) sheet.scrollTop += Math.min(fields.bottom - bottom, Math.max(0, fields.top - top));
-      else if (fields.top < top) sheet.scrollTop -= top - fields.top;
+      const isOtp = !$('stepOtp').classList.contains('grid-hidden');
+      const fields = $(isOtp ? 'otpBoxes' : state.method === 'mobile' ? 'phoneRow' : 'emailField').getBoundingClientRect();
+      const button = $(isOtp ? 'verifyOtp' : state.method === 'mobile' ? 'sendOtp' : 'emailContinue').getBoundingClientRect();
+      const bottom = (viewport?.offsetTop || 0) + height - 12;
+      const top = (viewport?.offsetTop || 0) + 12;
+      let delta = 0;
+      if (button.bottom > bottom) delta = Math.min(button.bottom - bottom, Math.max(0, fields.top - top));
+      else if (fields.top < top) delta = fields.top - top;
+      if (delta) window.scrollTo({ top: window.scrollY + delta, behavior: 'instant' });
     });
   }
-  window.visualViewport?.addEventListener('resize', updateLoginViewport);
-  window.visualViewport?.addEventListener('scroll', updateLoginViewport);
-  window.addEventListener('resize', updateLoginViewport);
-  $('loginOverlay').addEventListener('focusin', updateLoginViewport);
-  $('loginOverlay').querySelector('.login').addEventListener('transitionend', updateLoginViewport);
+  window.visualViewport?.addEventListener('resize', () => updateLoginViewport(true));
+  window.visualViewport?.addEventListener('scroll', () => updateLoginViewport());
+  window.addEventListener('resize', () => updateLoginViewport(true));
+  $('loginOverlay').addEventListener('focusin', () => updateLoginViewport(true));
+  $('loginOverlay').querySelector('.login').addEventListener('transitionend', e => {
+    if (e.target.classList.contains('login') && e.propertyName === 'transform') updateLoginViewport(true);
+  });
   function hideDialogs(restore = false) {
+    const page = loginPage;
+    const restorePage = document.body.classList.contains('login-page-open');
+    cancelAnimationFrame(viewportFrame);
     document.querySelectorAll('.overlay').forEach(el => el.classList.remove('show'));
     document.querySelectorAll('.login').forEach(el => { el.classList.remove('sheet-in'); el.style.transform = ''; el.style.transition = ''; });
     document.body.style.overflow = '';
+    document.body.classList.remove('login-page-open');
+    if (page) document.body.style.minHeight = page.minHeight;
+    loginPage = null;
+    if (restorePage && page) window.scrollTo({ top: page.scroll, behavior: 'instant' });
     document.querySelector('main').inert = false;
     clearInterval(timer);
-    if (restore && opener?.isConnected) opener.focus();
-    updateLoginViewport();
+    if (restore && opener?.isConnected) opener.focus({ preventScroll: true });
   }
   function show(id, initialFocus) {
     hideDialogs();
     opener = document.activeElement;
+    loginPage = { scroll: window.scrollY, minHeight: document.body.style.minHeight, documentHeight: document.documentElement.scrollHeight };
     $(id).classList.add('show');
     updateLoginViewport();
-    document.body.style.overflow = 'hidden';
     document.querySelector('main').inert = true;
     // Mobile sheet: slide up smoothly. Lay it off-screen, let the browser settle, then transition in.
     const sheet = $(id).querySelector('.login');
@@ -297,10 +308,10 @@
   $('counterClose').onclick = () => { state.dismissed = true; render(); };
   $('loginClose').onclick = closeLogin;
   $('loginOverlay').onclick = e => { if (e.target === $('loginOverlay')) closeLogin(); };
-  // Mobile bottom-sheet: drag the heritage band / handle down to dismiss.
+  // Only the handle dismisses on drag; the heritage band allows page scrolling.
   (() => {
     const sheet = document.querySelector('.login');
-    const grip = sheet.querySelector('.splash');
+    const grip = sheet.querySelector('.handle');
     let startY = null, dy = 0;
     const mobile = () => matchMedia('(max-width: 720px)').matches;
     grip.addEventListener('pointerdown', e => {
@@ -347,7 +358,7 @@
     clearCode();
     '123456'.split('').forEach((d, i) => { inputs[i].value = d; }); // demo: pre-fill code (set directly so auto-verify doesn't fire)
     countdown(); inputs[0].focus({ preventScroll: true }); inputs[0].select();
-    updateLoginViewport();
+    updateLoginViewport(true);
   }
   $('phoneInput').oninput = e => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10); $('phoneErr').classList.remove('show'); $('phoneRow').classList.remove('err'); };
   $('sendOtp').onclick = () => {
