@@ -7,8 +7,8 @@ Open `index.html` in a browser. No installation or server is required.
 - The first article is already open. The bottom sheet shows two articles remaining.
 - Use **Read next article** to finish the three-article allowance. Article four keeps its opening half visible, fades the preview into an inline login wall, and hides the remaining paragraphs until login.
 - The wall stays inside the article on desktop and mobile. Its login button opens the desktop popup or mobile bottom sheet; closing that form leaves the article locked. Successful login reveals the remaining text.
-- Log in using a valid Indian mobile number and demo OTP **123456**. No SMS is sent.
-- Email uses the same demo verification code. Google offers an explicitly simulated sign-in.
+- Log in using any 10-digit mobile number and any 6-digit OTP. No SMS is sent.
+- Email uses the same demo flow (any 6-digit code). Google offers an explicitly simulated sign-in.
 - Use **Restart** to return to the guest experience.
 - At widths of 720px or below, login becomes a bottom sheet. Desktop uses a popup.
 

@@ -271,7 +271,7 @@
     .nudge .handle { background: #d6dbe0; margin-top: -8px; margin-bottom: 14px; }
   }
 </style>
-<link rel="stylesheet" href="prototype.css?v=20261106-8" />
+<link rel="stylesheet" href="prototype.css?v=20261109-20" />
 </head>
 <body data-brand="dh" data-theme="dark">
 
@@ -309,12 +309,27 @@
   </header>
 
   <div class="counter" id="counterBar">
-    <div class="counter-num" id="counterNum" aria-hidden="true">3</div>
+    <div class="counter-progress" aria-hidden="true"><div class="counter-fill" id="counterFill"></div></div>
+    <svg class="counter-lock" width="26" height="26" viewBox="81 85 54 54" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle class="lk-badge" cx="108" cy="112" r="25"/>
+      <circle cx="108" cy="112" r="25" fill="none" stroke="#fff" stroke-width="2" opacity=".22"/>
+      <path d="M101 110v-5.5a7 7 0 0 1 14 0V110" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <rect x="97" y="110" width="22" height="17" rx="4.5" fill="#fff"/>
+      <circle class="lk-dot" cx="108" cy="116" r="2.4"/>
+      <rect class="lk-dot" x="106.8" y="116" width="2.4" height="6" rx="1.2"/>
+    </svg>
     <div class="counter-text">
       <strong id="counterCopy"></strong>
       <span class="counter-sub" data-i18n="counter_tail">Log in for unlimited access</span>
     </div>
-    <a id="counterLogin" class="counter-cta" role="button" tabindex="0" data-i18n="login">Log in</a>
+    <a id="counterLogin" class="counter-cta" role="button" tabindex="0">
+      <span data-i18n="login">Log in</span>
+      <svg class="cta-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+        <path d="m10 17 5-5-5-5"/>
+        <path d="M15 12H3"/>
+      </svg>
+    </a>
     <button class="x" id="counterClose" aria-label="Dismiss article counter" data-i18n-aria="counter_close">×</button>
   </div>
 
@@ -385,8 +400,11 @@
         </div>
       </div>
       <div class="wall-body">
-        <img class="wall-logo" id="wallLogo" alt="" />
-        <h2 id="wallTitle" data-i18n="wall_title">There’s more to the story.</h2>
+        <div class="wall-head">
+          <img class="wall-logo" id="wallLogo" alt="" />
+          <span class="wall-head-div" aria-hidden="true"></span>
+          <h2 id="wallTitle" data-i18n="wall_title">There’s more to the story.</h2>
+        </div>
         <p class="lede" id="wallLede"></p>
         <button class="btn-primary" id="wallLogin" data-i18n="login" hidden>Log in</button>
         <div class="wall-form">
@@ -400,7 +418,10 @@
             <span data-i18n="err_phone">Enter a valid 10-digit mobile number</span>
           </div>
           <label class="consent"><input type="checkbox" class="js-consent" checked /> <span data-i18n="consent">I agree to receive marketing and promotional updates.</span></label>
-          <button class="btn-primary" id="wallSendOtp" data-i18n="send_otp_arrow">Send OTP</button>
+          <button class="btn-primary" id="wallSendOtp">
+            <span data-i18n="send_otp_arrow">Get OTP</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+          </button>
           <p class="wall-alt"><span data-i18n="already_member">Already a member?</span> <a id="nudgeLogin" role="button" tabindex="0" data-i18n="login">Log in</a></p>
           <div class="or"><span data-i18n="other_ways">other ways to log in</span></div>
           <div class="socials">
@@ -514,7 +535,7 @@
             </div>
             <div class="err-msg" role="alert" id="otpErr" style="justify-content:center">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#d33" stroke-width="2"/><path d="M12 7v6" stroke="#d33" stroke-width="2"/><circle cx="12" cy="16.5" r="1" fill="#d33"/></svg>
-              <span data-i18n="err_otp">Incorrect code. Try 123456 in this demo.</span>
+              <span data-i18n="err_otp">Enter the complete 6-digit code.</span>
             </div>
             <button class="continue" id="verifyOtp" data-i18n="verify">Verify &amp; Continue</button>
             <div class="resend"><span data-i18n="resend_q">Didn’t get a code?</span> <button class="soc-btn" id="resendLink" disabled>Resend in 30s</button></div>
@@ -522,7 +543,6 @@
 
           <p class="terms" data-i18n-html="terms">By continuing, you agree to our <a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy Policy</a>, and to receive occasional account and offer updates from us.</p>
         </div>
-        <div class="foot" data-i18n-html="foot"><b>Your Login, Simplified</b> &nbsp;·&nbsp; One account for DH &amp; Prajavani</div>
       </div>
     </div>
   </div>
@@ -532,6 +552,6 @@
     <span id="toastMsg">You're logged in. Enjoy unlimited access!</span>
   </div>
 
-<script src="prototype.js?v=20261106-8"></script>
+<script src="prototype.js?v=20261109-21"></script>
 </body>
 </html>
