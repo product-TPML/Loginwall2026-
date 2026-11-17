@@ -45,7 +45,7 @@
       auth_title_mobile: 'Your next story awaits.', auth_title_email: 'Continue with email',
       auth_title_otp_phone: 'Check your phone', auth_title_otp_inbox: 'Check your inbox',
       auth_intro_mobile: 'Log in or sign up with your mobile number.',
-      ctx_keep: 'Log in to keep reading.', ctx_wall: 'Log in to continue reading this article.',
+      ctx_wall: 'Log in to continue reading this article.',
       auth_intro_email: 'We’ll send a verification code to your inbox.',
       auth_intro_otp: 'One quick step, and you’re back to the story.',
       tab_mobile: 'Mobile', otp_hint: 'We\'ll text you a 6-digit code to verify your number.',
@@ -89,7 +89,7 @@
       auth_title_mobile: 'ನಿಮ್ಮ ಮುಂದಿನ ಕಥೆ ಕಾಯುತ್ತಿದೆ.', auth_title_email: 'ಇಮೇಲ್‌ನೊಂದಿಗೆ ಮುಂದುವರಿಯಿರಿ',
       auth_title_otp_phone: 'ನಿಮ್ಮ ಫೋನ್ ನೋಡಿ', auth_title_otp_inbox: 'ನಿಮ್ಮ ಇನ್‌ಬಾಕ್ಸ್ ನೋಡಿ',
       auth_intro_mobile: 'ನಿಮ್ಮ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯೊಂದಿಗೆ ಲಾಗಿನ್ ಮಾಡಿ ಅಥವಾ ಸೈನ್ ಅಪ್ ಮಾಡಿ.',
-      ctx_keep: 'ಓದುವುದನ್ನು ಮುಂದುವರಿಸಲು ಲಾಗಿನ್ ಮಾಡಿ.', ctx_wall: 'ಈ ಲೇಖನವನ್ನು ಓದಲು ಲಾಗಿನ್ ಮಾಡಿ.',
+      ctx_wall: 'ಈ ಲೇಖನವನ್ನು ಓದಲು ಲಾಗಿನ್ ಮಾಡಿ.',
       auth_intro_email: 'ನಿಮ್ಮ ಇನ್‌ಬಾಕ್ಸ್‌ಗೆ ಪರಿಶೀಲನಾ ಕೋಡ್ ಕಳುಹಿಸುತ್ತೇವೆ.',
       auth_intro_otp: 'ಒಂದು ಪುಟ್ಟ ಹೆಜ್ಜೆ, ಮತ್ತೆ ಕಥೆಗೆ ಮರಳಿ.',
       tab_mobile: 'ಮೊಬೈಲ್', otp_hint: 'ನಿಮ್ಮ ಸಂಖ್ಯೆ ಪರಿಶೀಲಿಸಲು 6-ಅಂಕಿಯ ಕೋಡ್ ಕಳುಹಿಸುತ್ತೇವೆ.',
@@ -318,7 +318,7 @@
   $('versionSeg').onclick = e => { const b = e.target.closest('[data-version]'); if (b) { state.version = b.dataset.version; render(); } };
   $('nextBtn').onclick = next;
   $('relatedGrid').onclick = e => { if (e.target.closest('[data-next]')) next(); };
-  const loginSources = { counterLogin: 'ctx_keep', headerLogin: null, nudgeLogin: 'ctx_keep', wallLogin: 'ctx_wall' };
+  const loginSources = { counterLogin: 'ctx_wall', headerLogin: null, nudgeLogin: 'ctx_wall', wallLogin: 'ctx_wall' };
   Object.keys(loginSources).forEach(id => $(id).onclick = () => login(loginSources[id]));
   // Inline phone capture on the article-4 wall -> opens the focused modal straight on the OTP step.
   function openOtpStep(method, value, target) {
