@@ -283,7 +283,8 @@ body[data-brand="pv"] .inline-wall[data-version="v2"] .illo-back img { width: 96
   .login .splash { display: flex; min-height: 184px; flex-direction: column; justify-content: center; align-items: flex-start; gap: 7px; padding: 18px 24px; background-position: center; }
   .login .splash .handle { position: absolute; left: 50%; top: 9px; transform: translateX(-50%); margin: 0; z-index: 2; touch-action: none; cursor: grab; }
   .login .splash .splash-statement { margin: 0; }
-  .login .splash .ss-quote, .login .splash .ss-sub { display: none; }
+  .login .splash .ss-quote { display: none; }
+  .login .splash .ss-sub { margin: 0; }
   .login .splash .ss-eyebrow { margin: 0; font-size: 12px; }
   body[data-brand="dh"] .login .splash img.blogo { height: 36px; }
   body[data-brand="pv"] .login .splash img.blogo { width: 158px; }

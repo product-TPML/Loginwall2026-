@@ -2,7 +2,7 @@
   'use strict';
   const $ = id => document.getElementById(id);
   const FREE_LIMIT = 3; // number of free articles before the wall (supports 1–6+)
-  const state = { brand: 'dh', theme: 'dark', version: 'v1', article: 0, signedIn: false, method: 'mobile', dismissed: false, revealed: false };
+  const state = { brand: 'dh', theme: 'dark', version: 'v1', article: 0, signedIn: false, method: 'mobile', loginContext: null, dismissed: false, revealed: false };
   const headlines = [
     'Tendulkar-Anderson Trophy: New-look Team India ready for the big test',
     'Shubman Gill to lead with a plan: a new chapter for Indian cricket',
@@ -41,10 +41,11 @@
       sections: ['India', 'Karnataka', 'Sports', 'Business', 'Opinion', 'Entertainment', 'Cricket', 'Technology'],
       since: 'SINCE 1948',
       statement: 'Journalism that holds power to account.',
-      statement_sub: 'Free, with a quick login.',
+      statement_sub: 'One quick login.',
       auth_title_mobile: 'Your next story awaits.', auth_title_email: 'Continue with email',
       auth_title_otp_phone: 'Check your phone', auth_title_otp_inbox: 'Check your inbox',
-      auth_intro_mobile: 'Log in or create a free account with your mobile number.',
+      auth_intro_mobile: 'Log in or sign up with your mobile number.',
+      ctx_keep: 'Log in to keep reading.', ctx_wall: 'Log in to continue reading this article.',
       auth_intro_email: 'We’ll send a verification code to your inbox.',
       auth_intro_otp: 'One quick step, and you’re back to the story.',
       tab_mobile: 'Mobile', otp_hint: 'We\'ll text you a 6-digit code to verify your number.',
@@ -84,10 +85,11 @@
       sections: ['ಭಾರತ', 'ಕರ್ನಾಟಕ', 'ಕ್ರೀಡೆ', 'ವಾಣಿಜ್ಯ', 'ಅಭಿಪ್ರಾಯ', 'ಮನರಂಜನೆ', 'ಕ್ರಿಕೆಟ್', 'ತಂತ್ರಜ್ಞಾನ'],
       since: '1948 ರಿಂದ',
       statement: 'ಅಧಿಕಾರವನ್ನು ಪ್ರಶ್ನಿಸುವ ಪತ್ರಿಕೋದ್ಯಮ.',
-      statement_sub: 'ಉಚಿತ — ತ್ವರಿತ ಲಾಗಿನ್‌ನೊಂದಿಗೆ.',
+      statement_sub: 'ಒಂದು ತ್ವರಿತ ಲಾಗಿನ್.',
       auth_title_mobile: 'ನಿಮ್ಮ ಮುಂದಿನ ಕಥೆ ಕಾಯುತ್ತಿದೆ.', auth_title_email: 'ಇಮೇಲ್‌ನೊಂದಿಗೆ ಮುಂದುವರಿಯಿರಿ',
       auth_title_otp_phone: 'ನಿಮ್ಮ ಫೋನ್ ನೋಡಿ', auth_title_otp_inbox: 'ನಿಮ್ಮ ಇನ್‌ಬಾಕ್ಸ್ ನೋಡಿ',
-      auth_intro_mobile: 'ನಿಮ್ಮ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯೊಂದಿಗೆ ಲಾಗಿನ್ ಮಾಡಿ ಅಥವಾ ಉಚಿತ ಖಾತೆ ರಚಿಸಿ.',
+      auth_intro_mobile: 'ನಿಮ್ಮ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯೊಂದಿಗೆ ಲಾಗಿನ್ ಮಾಡಿ ಅಥವಾ ಸೈನ್ ಅಪ್ ಮಾಡಿ.',
+      ctx_keep: 'ಓದುವುದನ್ನು ಮುಂದುವರಿಸಲು ಲಾಗಿನ್ ಮಾಡಿ.', ctx_wall: 'ಈ ಲೇಖನವನ್ನು ಓದಲು ಲಾಗಿನ್ ಮಾಡಿ.',
       auth_intro_email: 'ನಿಮ್ಮ ಇನ್‌ಬಾಕ್ಸ್‌ಗೆ ಪರಿಶೀಲನಾ ಕೋಡ್ ಕಳುಹಿಸುತ್ತೇವೆ.',
       auth_intro_otp: 'ಒಂದು ಪುಟ್ಟ ಹೆಜ್ಜೆ, ಮತ್ತೆ ಕಥೆಗೆ ಮರಳಿ.',
       tab_mobile: 'ಮೊಬೈಲ್', otp_hint: 'ನಿಮ್ಮ ಸಂಖ್ಯೆ ಪರಿಶೀಲಿಸಲು 6-ಅಂಕಿಯ ಕೋಡ್ ಕಳುಹಿಸುತ್ತೇವೆ.',
@@ -295,15 +297,16 @@
     $('stepEnter').classList.remove('grid-hidden');
     $('stepOtp').classList.add('grid-hidden');
     $('authTitle').textContent = method === 'mobile' ? L().auth_title_mobile : L().auth_title_email;
-    $('authIntro').textContent = method === 'mobile' ? L().auth_intro_mobile : L().auth_intro_email;
+    $('authIntro').textContent = (state.loginContext && L()[state.loginContext]) || (method === 'mobile' ? L().auth_intro_mobile : L().auth_intro_email);
     document.querySelectorAll('.err-msg').forEach(el => el.classList.remove('show'));
     document.querySelectorAll('.err').forEach(el => el.classList.remove('err'));
     clearInterval(timer);
   }
-  function login() { setMethod('mobile'); show('loginOverlay'); }
+  // `source` picks the context line shown under the title (a key into the i18n strings); omit for the generic login.
+  function login(source) { state.loginContext = source || null; setMethod('mobile'); show('loginOverlay'); }
   function closeLogin() { hideDialogs(true); }
   function next() {
-    if (locked()) { login(); return; }
+    if (locked()) { login('ctx_wall'); return; }
     state.article++;
     state.dismissed = false;
     armReveal(); // each article re-earns the counter (matches real per-page loads)
@@ -315,7 +318,8 @@
   $('versionSeg').onclick = e => { const b = e.target.closest('[data-version]'); if (b) { state.version = b.dataset.version; render(); } };
   $('nextBtn').onclick = next;
   $('relatedGrid').onclick = e => { if (e.target.closest('[data-next]')) next(); };
-  ['counterLogin', 'headerLogin', 'nudgeLogin', 'wallLogin'].forEach(id => $(id).onclick = login);
+  const loginSources = { counterLogin: 'ctx_keep', headerLogin: null, nudgeLogin: 'ctx_keep', wallLogin: 'ctx_wall' };
+  Object.keys(loginSources).forEach(id => $(id).onclick = () => login(loginSources[id]));
   // Inline phone capture on the article-4 wall -> opens the focused modal straight on the OTP step.
   function openOtpStep(method, value, target) {
     state.method = method;
@@ -334,7 +338,7 @@
     if (valid) withBusy($('wallSendOtp'), () => openOtpStep('mobile', number, '+91 ' + number.slice(0, 5) + ' ' + number.slice(5)));
   };
   $('wallGoogle').onclick = success;
-  $('wallEmail').onclick = () => { login(); setMethod('email'); $('emailInput').focus(); };
+  $('wallEmail').onclick = () => { login('ctx_wall'); setMethod('email'); $('emailInput').focus(); };
   $('counterClose').onclick = () => { state.dismissed = true; render(); };
   $('loginClose').onclick = closeLogin;
   $('loginOverlay').onclick = e => { if (e.target === $('loginOverlay')) closeLogin(); };
