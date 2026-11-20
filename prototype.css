@@ -275,6 +275,9 @@ body[data-brand="pv"] .inline-wall[data-version="v2"] .illo-back img { width: 96
   .dock { padding: 8px 6px; gap: 4px; }
   .dock .lbl { display: none; }
   .seg button { font-size: 10px; padding: 7px 9px; }
+}
+.seg[hidden] { display: none; }
+@media (max-width: 720px) {
   .dock .reset { font-size: 11px; padding: 7px; }
   .stage-label { display: none; }
   .site-header .bar { min-height: 77px; padding: 16px 20px; }
@@ -365,3 +368,25 @@ body[data-theme="light"] .inline-wall .phone-row { border-color: var(--border); 
 body[data-theme="light"] .inline-wall .wall-alt { color: var(--muted); }
 body[data-theme="light"] .inline-wall .wall-alt a { color: var(--brand); }
 body[data-theme="light"] .inline-wall .wall-alt .sep { color: var(--border); }
+
+/* Sudha & Mayura — Kannada magazines under Prajavani. Mirror PV's taller Kannada copy and
+   wordmark logo sizing. Colors derived from each magazine's masthead ink (Magazine repo). */
+body[data-brand="sudha"] { --nudge-background: linear-gradient(150deg, #3a0a12, #1c0609); }  /* Sudha maroon */
+body[data-brand="mayura"] { --nudge-background: linear-gradient(150deg, #04344a, #04161f); } /* Mayura blue */
+/* Login splash carousel = magazine issue covers (from the Magazine repo). */
+body[data-brand="sudha"] .sp-building { background-image: url('assets/covers/sudha-1.jpg'); background-position: center top; }
+body[data-brand="sudha"] .sp-founder { background-image: url('assets/covers/sudha-2.jpg'); background-position: center top; }
+body[data-brand="sudha"] .sp-floor { background-image: url('assets/covers/sudha-3.jpg'); background-position: center top; }
+body[data-brand="sudha"] .sp-crowd { background-image: url('assets/covers/sudha-4.jpg'); background-position: center top; }
+body[data-brand="mayura"] .sp-building { background-image: url('assets/covers/mayura-1.jpg'); background-position: center top; }
+body[data-brand="mayura"] .sp-founder { background-image: url('assets/covers/mayura-2.jpg'); background-position: center top; }
+body[data-brand="mayura"] .sp-floor { background-image: url('assets/covers/mayura-1.jpg'); background-position: center top; }
+body[data-brand="mayura"] .sp-crowd { background-image: url('assets/covers/mayura-2.jpg'); background-position: center top; }
+body[data-brand="sudha"] .login, body[data-brand="mayura"] .login { min-height: 564px; }
+body[data-brand="sudha"] .login .splash img.blogo, body[data-brand="mayura"] .login .splash img.blogo { width: 200px; }
+body[data-brand="sudha"] .illo-back img, body[data-brand="mayura"] .illo-back img { width: 150px; }
+body[data-brand="sudha"] .inline-wall[data-version="v2"] .illo-back img, body[data-brand="mayura"] .inline-wall[data-version="v2"] .illo-back img { width: 96px; }
+@media (max-width: 720px) {
+  body[data-brand="sudha"] .login, body[data-brand="mayura"] .login { min-height: 0; }
+  body[data-brand="sudha"] .login .splash img.blogo, body[data-brand="mayura"] .login .splash img.blogo { width: 158px; }
+}

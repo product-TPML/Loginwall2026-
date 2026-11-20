@@ -42,6 +42,30 @@
     --sans: 'Prajavani Text', 'Noto Sans Kannada', sans-serif;
     --logo-font: 'PV Headline', 'Prajavani Text', 'Noto Serif Kannada', serif;
   }
+  /* Sudha — Kannada weekly under Prajavani. Brand color = masthead ink (Magazine repo). */
+  body[data-brand="sudha"] {
+    --brand: #7b1220;
+    --brand-dark: var(--brand);
+    --brand-tint: #f6e7e9;
+    --brand-soft: #d79aa2;
+    --splash: var(--brand);
+    --splash-2: #a93a46;
+    --serif: 'PV Headline', 'Prajavani Text', 'Noto Serif Kannada', serif;
+    --sans: 'Prajavani Text', 'Noto Sans Kannada', sans-serif;
+    --logo-font: 'PV Headline', 'Prajavani Text', 'Noto Serif Kannada', serif;
+  }
+  /* Mayura — Kannada monthly under Prajavani. Brand color = masthead ink (Magazine repo). */
+  body[data-brand="mayura"] {
+    --brand: #00699e;
+    --brand-dark: var(--brand);
+    --brand-tint: #e3eff5;
+    --brand-soft: #93c2d8;
+    --splash: var(--brand);
+    --splash-2: #3d93bd;
+    --serif: 'PV Headline', 'Prajavani Text', 'Noto Serif Kannada', serif;
+    --sans: 'Prajavani Text', 'Noto Sans Kannada', sans-serif;
+    --logo-font: 'PV Headline', 'Prajavani Text', 'Noto Serif Kannada', serif;
+  }
 
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
@@ -203,8 +227,10 @@
   .phone-row input, .text-field input { border: 0; outline: 0; font: inherit; font-size: 16px; padding: 13px 14px; width: 100%; background: #fff; }
   .text-field { border: 1px solid var(--border); border-radius: 9px; overflow: hidden; }
   .text-field.err { border-color: #e23; }
-  .err-msg { display: none; align-items: center; gap: 7px; background: #fff2f2; color: #d33; font-size: 13px; padding: 9px 12px; border-radius: 8px; margin-top: 10px; }
-  .err-msg.show { display: flex; }
+  /* Always laid out (reserves its space) and only toggles visibility, so showing an error
+     never changes the card height — no sudden jump in the popup / bottom sheet. */
+  .err-msg { display: flex; visibility: hidden; align-items: center; gap: 7px; background: #fff2f2; color: #d33; font-size: 13px; padding: 9px 12px; border-radius: 8px; margin-top: 10px; }
+  .err-msg.show { visibility: visible; }
 
   .continue { width: 100%; margin-top: 16px; background: var(--brand-dark); color: #fff; border: 0; border-radius: 9px; padding: 14px; font: inherit; font-weight: 700; font-size: 16px; cursor: pointer; }
   .continue:hover { filter: brightness(1.05); }
@@ -271,7 +297,7 @@
     .nudge .handle { background: #d6dbe0; margin-top: -8px; margin-bottom: 14px; }
   }
 </style>
-<link rel="stylesheet" href="prototype.css?v=20261120-2" />
+<link rel="stylesheet" href="prototype.css?v=20261120-3" />
 </head>
 <body data-brand="dh" data-theme="dark">
 
@@ -281,19 +307,21 @@
     <div class="seg" id="brandSeg">
       <button data-brand="dh" class="on">Deccan Herald</button>
       <button data-brand="pv">Prajavani</button>
+      <button data-brand="sudha">Sudha</button>
+      <button data-brand="mayura">Mayura</button>
     </div>
-    <div class="seg" id="themeSeg">
+    <div class="seg" id="themeSeg" hidden>
       <button data-theme="dark" class="on">Dark</button>
-      <button data-theme="light">Light</button>
+      <button data-theme="light" hidden>Light</button>
     </div>
     <div class="seg" id="versionSeg" role="group" aria-label="Inline login wall version">
       <button data-version="v1" class="on" aria-pressed="true" title="Mobile number without benefits">V1</button>
-      <button data-version="v2" aria-pressed="false" title="Login button and benefits">V2</button>
-      <button data-version="v3" aria-pressed="false" title="Login button without benefits">V3</button>
-      <button data-version="v4" aria-pressed="false" title="Mobile number and benefits">V4</button>
-      <button data-version="v5" aria-pressed="false" title="Google first, then mobile and email">V5</button>
+      <button data-version="v2" aria-pressed="false" title="Login button and benefits" hidden>V2</button>
+      <button data-version="v3" aria-pressed="false" title="Login button without benefits" hidden>V3</button>
+      <button data-version="v4" aria-pressed="false" title="Mobile number and benefits" hidden>V4</button>
+      <button data-version="v5" aria-pressed="false" title="Google first, then mobile and email" hidden>V5</button>
     </div>
-    <button class="reset" id="resetBtn">↻ Restart</button><span class="stage-label" id="stageLabel"></span>
+    <button class="reset" id="wallJumpBtn">↡ Go to login wall</button><button class="reset" id="resetBtn">↻ Restart</button><span class="stage-label" id="stageLabel"></span>
   </div>
 
   <!-- Mock news site -->
@@ -535,6 +563,7 @@
                 Google
               </button><span class="secondary-divider" aria-hidden="true"></span><button class="soc-btn" id="emailOption"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2.5" stroke="currentColor" stroke-width="2"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="2"/></svg><span data-i18n="email">Email</span></button><button class="soc-btn grid-hidden" id="mobileSwitch"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="6" y="2" width="12" height="20" rx="2.5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="18" r="1" fill="currentColor"/></svg><span data-i18n="tab_mobile">Mobile</span></button>
             </div>
+            <p class="terms" data-i18n-html="terms">By continuing, you agree to our <a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy Policy</a>.</p>
           </div>
 
 <!-- STEP: OTP -->
@@ -551,8 +580,6 @@
             <button class="continue" id="verifyOtp" data-i18n="verify">Verify &amp; Continue</button>
             <div class="resend"><span data-i18n="resend_q">Didn’t get a code?</span> <button class="soc-btn" id="resendLink" disabled>Resend in 30s</button></div>
           </div>
-
-          <p class="terms" data-i18n-html="terms">By continuing, you agree to our <a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy Policy</a>.</p>
         </div>
       </div>
     </div>
@@ -563,6 +590,6 @@
     <span id="toastMsg">You're logged in. Enjoy unlimited access!</span>
   </div>
 
-<script src="prototype.js?v=20261109-21"></script>
+<script src="prototype.js?v=20261120-1"></script>
 </body>
 </html>

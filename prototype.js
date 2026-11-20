@@ -108,6 +108,18 @@
       toast_login: 'ನೀವು ಲಾಗಿನ್ ಆಗಿದ್ದೀರಿ. ಓದುವುದನ್ನು ಮುಂದುವರಿಸಿ, ಉಚಿತ.', toast_resent: 'ಹೊಸ ಕೋಡ್ ಕಳುಹಿಸಲಾಗಿದೆ.'
     }
   };
+  // Kannada magazines under Prajavani — same structure; only logo/colors/brand copy differ.
+  // Names + cadence from the Magazine repo (Sudha = weekly, Mayura = monthly).
+  // `since` years are PLACEHOLDERS — the repo has no founding date; replace when confirmed.
+  copy.sudha  = { ...copy.pv, brand_name: 'ಸುಧಾ',  since: '1965 ರಿಂದ', statement: 'ಕನ್ನಡದ ಜನಪ್ರಿಯ ವಾರಪತ್ರಿಕೆ.' };
+  copy.mayura = { ...copy.pv, brand_name: 'ಮಯೂರ', since: '1968 ರಿಂದ', statement: 'ಕನ್ನಡದ ಸಾಹಿತ್ಯ ಮಾಸಪತ್ರಿಕೆ.' };
+  // Per-brand masthead text, language, and logo asset key.
+  const brandMeta = {
+    dh:     { kn: false, mark: 'DH',        sub: 'DECCAN HERALD', logo: 'dh' },
+    pv:     { kn: true,  mark: 'ಪ್ರಜಾವಾಣಿ',  sub: 'PRAJAVANI',     logo: 'pv' },
+    sudha:  { kn: true,  mark: 'ಸುಧಾ',       sub: 'SUDHA',         logo: 'sudha' },
+    mayura: { kn: true,  mark: 'ಮಯೂರ',      sub: 'MAYURA',        logo: 'mayura' }
+  };
   const L = () => copy[state.brand];
   function applyI18n() {
     const d = L();
@@ -120,7 +132,7 @@
   const pendingActions = new Map();
   const locked = () => !state.signedIn && state.article >= FREE_LIMIT;
   function render() {
-    const pv = state.brand === 'pv';
+    const meta = brandMeta[state.brand], kn = meta.kn;
     const d = L();
     document.body.dataset.brand = state.brand;
     document.body.dataset.theme = state.theme;
@@ -133,23 +145,23 @@
       b.setAttribute('aria-pressed', String(selected));
     });
     $('wallLogin').hidden = formVersion;
-    document.documentElement.lang = pv ? 'kn' : 'en';
+    document.documentElement.lang = kn ? 'kn' : 'en';
     document.querySelectorAll('#themeSeg button').forEach(b => b.classList.toggle('on', b.dataset.theme === state.theme));
     applyI18n();
     document.querySelectorAll('#brandSeg button').forEach(b => {
       b.classList.toggle('on', b.dataset.brand === state.brand);
       b.setAttribute('aria-pressed', String(b.dataset.brand === state.brand));
     });
-    $('siteLogo').querySelector('.mark').textContent = pv ? 'ಪ್ರಜಾವಾಣಿ' : 'DH';
-    $('siteLogo').querySelector('.sub').textContent = pv ? 'PRAJAVANI' : 'DECCAN HERALD';
-    $('articleTitle').textContent = (pv ? kannadaHeadlines : headlines)[state.article % 4];
+    $('siteLogo').querySelector('.mark').textContent = meta.mark;
+    $('siteLogo').querySelector('.sub').textContent = meta.sub;
+    $('articleTitle').textContent = (kn ? kannadaHeadlines : headlines)[state.article % 4];
     $('crumbs').innerHTML = d.crumbs;
     $('articleDeck').textContent = d.deck;
     $('byline').innerHTML = d.byline;
     $('heroLabel').textContent = d.hero_label;
     $('heroCap').textContent = d.hero_cap;
-    const whiteLogo = pv ? 'assets/logos/pv-logo.svg' : 'assets/logos/dh-logo.svg';
-    const brandLogo = pv ? 'assets/logos/pv-logo-brand.svg' : 'assets/logos/dh-logo-brand.svg';
+    const whiteLogo = `assets/logos/${meta.logo}-logo.svg`;
+    const brandLogo = `assets/logos/${meta.logo}-logo-brand.svg`;
     const wallLogoSrc = state.theme === 'light' ? brandLogo : whiteLogo; // brand-coloured in light, white on dark
     $('splashLogo').src = whiteLogo; $('splashLogo').alt = d.brand_name; // always white (dark heritage photos)
     ['wallLogo', 'illoLogo'].forEach(id => { $(id).src = wallLogoSrc; $(id).alt = d.brand_name; });
@@ -158,7 +170,7 @@
     $('splashStatementSub').textContent = d.statement_sub;
     $('wallLede').textContent = (formVersion ? d.wall_lede : d.wall_lede_login).replace('{brand}', d.brand_name).replace('{n}', FREE_LIMIT);
     $('perkList').innerHTML = d.perks.map(p => `<li><span aria-hidden="true">✓</span><span>${p}</span></li>`).join('');
-    $('relatedGrid').innerHTML = (pv ? kannadaHeadlines : headlines).slice(1).map(h => `<button class="rel-card" data-next="1"><div class="thumb"></div><div class="t">${h}</div></button>`).join('');
+    $('relatedGrid').innerHTML = (kn ? kannadaHeadlines : headlines).slice(1).map(h => `<button class="rel-card" data-next="1"><div class="thumb"></div><div class="t">${h}</div></button>`).join('');
     $('headerLogin').textContent = state.signedIn ? d.my_account : d.login;
     $('headerLogin').disabled = state.signedIn;
     const remaining = Math.max(FREE_LIMIT - state.article, 0);
@@ -172,8 +184,8 @@
     $('articleWall').classList.toggle('grid-hidden', !locked());
     $('nextBtn').textContent = locked() ? d.next_locked : d.next_read;
     const body = $('fadeLock');
-    body.innerHTML = pv ? '<p>ತಂಡದಲ್ಲಿ ಬದಲಾವಣೆ ಸಹಜ. ಹಿರಿಯ ಆಟಗಾರರ ನಿರ್ಗಮನದ ನಂತರ ಯುವ ಆಟಗಾರರಿಗೆ ತಮ್ಮ ಸಾಮರ್ಥ್ಯ ತೋರಿಸಲು ಇದು ಉತ್ತಮ ಅವಕಾಶವಾಗಿದೆ.</p><p>ಶುಭಮನ್ ಗಿಲ್ ಮತ್ತು ಇತರ ಯುವ ಆಟಗಾರರ ಮೇಲೆ ತಂಡ ಹೆಚ್ಚಿನ ನಿರೀಕ್ಷೆ ಇಟ್ಟಿದೆ. ಹೊಸ ಸವಾಲುಗಳನ್ನು ಎದುರಿಸಲು ತಂಡ ಸಜ್ಜಾಗಿದೆ.</p><p>ಬೌಲಿಂಗ್ ವಿಭಾಗದ ಪ್ರದರ್ಶನ ಈ ಸರಣಿಯಲ್ಲಿ ನಿರ್ಣಾಯಕವಾಗಲಿದೆ. ಸಂಘಟಿತ ಆಟದ ಮೂಲಕ ಉತ್ತಮ ಫಲಿತಾಂಶ ಪಡೆಯುವುದು ತಂಡದ ಗುರಿಯಾಗಿದೆ.</p>' : '<p>Transitions are an inevitable part of team sports. While the exits of established players leave a major void, they also present an opportunity for the next generation to step up.</p><p>The onus will be on the likes of Shubman Gill, Yashasvi Jaiswal and Rishabh Pant to shoulder the batting responsibilities carried by the senior players who have moved on.</p><p>The bowling unit remains a source of strength, but managing workloads across a long series will be a defining challenge for the team management.</p>';
-    $('articleIntro').textContent = pv ? 'ಇಂಗ್ಲೆಂಡ್ ವಿರುದ್ಧದ ಟೆಸ್ಟ್ ಸರಣಿಯಲ್ಲಿ ಯುವ ಭಾರತ ತಂಡಕ್ಕೆ ತನ್ನ ಸಾಮರ್ಥ್ಯ ಸಾಬೀತುಪಡಿಸುವ ಅವಕಾಶ ದೊರೆತಿದೆ.' : 'India enters a new era as a young squad prepares for the challenge of a five-match Test series in England.';
+    body.innerHTML = kn ? '<p>ತಂಡದಲ್ಲಿ ಬದಲಾವಣೆ ಸಹಜ. ಹಿರಿಯ ಆಟಗಾರರ ನಿರ್ಗಮನದ ನಂತರ ಯುವ ಆಟಗಾರರಿಗೆ ತಮ್ಮ ಸಾಮರ್ಥ್ಯ ತೋರಿಸಲು ಇದು ಉತ್ತಮ ಅವಕಾಶವಾಗಿದೆ.</p><p>ಶುಭಮನ್ ಗಿಲ್ ಮತ್ತು ಇತರ ಯುವ ಆಟಗಾರರ ಮೇಲೆ ತಂಡ ಹೆಚ್ಚಿನ ನಿರೀಕ್ಷೆ ಇಟ್ಟಿದೆ. ಹೊಸ ಸವಾಲುಗಳನ್ನು ಎದುರಿಸಲು ತಂಡ ಸಜ್ಜಾಗಿದೆ.</p><p>ಬೌಲಿಂಗ್ ವಿಭಾಗದ ಪ್ರದರ್ಶನ ಈ ಸರಣಿಯಲ್ಲಿ ನಿರ್ಣಾಯಕವಾಗಲಿದೆ. ಸಂಘಟಿತ ಆಟದ ಮೂಲಕ ಉತ್ತಮ ಫಲಿತಾಂಶ ಪಡೆಯುವುದು ತಂಡದ ಗುರಿಯಾಗಿದೆ.</p>' : '<p>Transitions are an inevitable part of team sports. While the exits of established players leave a major void, they also present an opportunity for the next generation to step up.</p><p>The onus will be on the likes of Shubman Gill, Yashasvi Jaiswal and Rishabh Pant to shoulder the batting responsibilities carried by the senior players who have moved on.</p><p>The bowling unit remains a source of strength, but managing workloads across a long series will be a defining challenge for the team management.</p>';
+    $('articleIntro').textContent = kn ? 'ಇಂಗ್ಲೆಂಡ್ ವಿರುದ್ಧದ ಟೆಸ್ಟ್ ಸರಣಿಯಲ್ಲಿ ಯುವ ಭಾರತ ತಂಡಕ್ಕೆ ತನ್ನ ಸಾಮರ್ಥ್ಯ ಸಾಬೀತುಪಡಿಸುವ ಅವಕಾಶ ದೊರೆತಿದೆ.' : 'India enters a new era as a young squad prepares for the challenge of a five-match Test series in England.';
     body.querySelectorAll('p').forEach((paragraph, index) => {
       paragraph.hidden = locked() && index > 0;
     });
@@ -437,6 +449,8 @@
   $('googlePrimaryBtn').onclick = success;
   function prefillDemo() { $('phoneInput').value = ''; $('emailInput').value = ''; $('wallPhone').value = ''; } // start empty; any 10-digit number and any 6-digit OTP are accepted
   $('resetBtn').onclick = () => { state.article = 0; state.signedIn = false; state.dismissed = false; hideDialogs(); setMethod('mobile'); prefillDemo(); document.querySelectorAll('.js-consent').forEach(c => c.checked = true); $('toast').classList.remove('show'); window.scrollTo({ top: 0 }); armReveal(); render(); };
+  // Prototype shortcut: jump straight to the locked inline login wall.
+  $('wallJumpBtn').onclick = () => { state.signedIn = false; state.dismissed = false; state.article = FREE_LIMIT; state.revealed = true; hideDialogs(); render(); $('articleWall').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
   document.addEventListener('keydown', e => {
     if ((e.key === 'Enter' || e.key === ' ') && e.target.matches?.('a[role="button"]')) { e.preventDefault(); e.target.click(); return; }
     const dialog = document.querySelector('.overlay.show');
