@@ -206,6 +206,17 @@ body[data-brand="pv"] .inline-wall[data-version="v2"] .illo-back img { width: 96
 #loginOverlay[data-version="v5"] #googlePrimaryBtn { display: inline-flex; }
 #loginOverlay[data-version="v5"] .or-mobile { display: flex; margin: 16px 0 18px; }
 #loginOverlay[data-version="v5"] #googleBtn, #loginOverlay[data-version="v5"] .socials .secondary-divider { display: none; }
+/* Non-v5 — give Google + Email more weight: equal outlined pills, side by side */
+#loginOverlay:not([data-version="v5"]) #stepEnter .socials,
+.inline-wall:not([data-version="v5"]) .socials { gap: 10px; }
+#loginOverlay:not([data-version="v5"]) #stepEnter .socials .soc-btn,
+.inline-wall:not([data-version="v5"]) .socials .soc-btn { flex: 1; opacity: 1; background: #fff; color: #1f2937; border: 1px solid #d0d5dd; border-radius: 9px; padding: 11px 14px; font-size: 13px; font-weight: 600; }
+#loginOverlay:not([data-version="v5"]) #stepEnter .socials .soc-btn:hover,
+.inline-wall:not([data-version="v5"]) .socials .soc-btn:hover { background: #f6f7f9; color: #1f2937; opacity: 1; }
+#loginOverlay:not([data-version="v5"]) #stepEnter .socials .soc-btn svg,
+.inline-wall:not([data-version="v5"]) .socials .soc-btn svg { width: 18px; height: 18px; opacity: 1; }
+#loginOverlay:not([data-version="v5"]) #stepEnter .socials .secondary-divider,
+.inline-wall:not([data-version="v5"]) .socials .secondary-divider { display: none; }
 .wall-logo { height: 32px; width: auto; display: block; margin: 0 0 16px; }
 /* logo + heading on one line, split by a divider (all versions) */
 .inline-wall .wall-head { display: flex; align-items: center; gap: 14px; margin: 0 0 18px; }
