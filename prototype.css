@@ -187,13 +187,13 @@ body[data-brand="pv"] .inline-wall[data-version="v2"] .illo-back img { width: 96
 .inline-wall[data-version="v3"] .wall-body .lede { margin: 0 auto 12px; text-align: center; font-size: 13px; line-height: 1.55; }
 .inline-wall[data-version="v3"] .btn-primary { width: auto; min-width: 160px; max-width: 100%; margin: 0 auto; padding: 12px 32px; }
 /* V4 = mobile form only — no illustration panel, no benefits, centered */
-.inline-wall[data-version="v4"] .nudge { grid-template-columns: 1fr; }
-.inline-wall[data-version="v4"] .wall-visual { display: none; }
-.inline-wall[data-version="v4"] .wall-body { max-width: 560px; width: 100%; margin: 0 auto; padding: 28px 24px; text-align: center; }
-.inline-wall[data-version="v4"] .wall-logo { margin: 0 auto 14px; }
-.inline-wall[data-version="v4"] h2 { text-align: center; }
-.inline-wall[data-version="v4"] .wall-body .lede { margin: 0 auto 18px; text-align: center; max-width: 440px; }
-.inline-wall[data-version="v4"] .wall-form { text-align: left; }
+.inline-wall[data-version="v1"] .nudge { grid-template-columns: 1fr; }
+.inline-wall[data-version="v1"] .wall-visual { display: none; }
+.inline-wall[data-version="v1"] .wall-body { max-width: 560px; width: 100%; margin: 0 auto; padding: 28px 24px; text-align: center; }
+.inline-wall[data-version="v1"] .wall-logo { margin: 0 auto 14px; }
+.inline-wall[data-version="v1"] h2 { text-align: center; }
+.inline-wall[data-version="v1"] .wall-body .lede { margin: 0 auto 18px; text-align: center; max-width: 440px; }
+.inline-wall[data-version="v1"] .wall-form { text-align: left; }
 /* v5 — Google first, then mobile, then email */
 .btn-google, .or-mobile { display: none; }
 .inline-wall[data-version="v5"] .btn-google { display: inline-flex; margin-top: 0; background: #fff; color: #1f2937; border: 1px solid #d0d5dd; }
@@ -223,7 +223,7 @@ body[data-brand="pv"] .inline-wall[data-version="v2"] .illo-back img { width: 96
 .inline-wall .wall-head .wall-logo { flex: 0 0 auto; margin: 0; }
 .inline-wall .wall-head .wall-head-div { flex: 0 0 auto; align-self: stretch; width: 1px; background: #ffffff33; }
 .inline-wall .wall-head h2 { flex: 0 1 auto; margin: 0; font-size: 20px; line-height: 1.25; }
-.inline-wall[data-version="v3"] .wall-head, .inline-wall[data-version="v4"] .wall-head { justify-content: center; }
+.inline-wall[data-version="v3"] .wall-head, .inline-wall[data-version="v1"] .wall-head { justify-content: center; }
 .wall-body .cap-tab { margin-bottom: 13px; }
 .inline-wall .wall-body .lede { margin: 0 0 20px; max-width: none; text-align: left; }
 /* Inline mobile-capture form inside the wall */
@@ -263,13 +263,13 @@ body[data-brand="pv"] .inline-wall[data-version="v2"] .illo-back img { width: 96
   .inline-wall[data-version="v2"] .wall-head { justify-content: center; }
   .inline-wall[data-version="v2"] .wall-body .lede { text-align: center; }
   /* V1 login wall — centered only on mobile (desktop stays left-aligned) */
-  .inline-wall[data-version="v1"] .wall-body { text-align: center; }
-  .inline-wall[data-version="v1"] .wall-head { justify-content: center; }
-  .inline-wall[data-version="v1"] .wall-body .lede { text-align: center; }
-  .inline-wall[data-version="v1"] .wall-form { max-width: 340px; margin-inline: auto; text-align: center; }
-  .inline-wall[data-version="v1"] .wall-body .err-msg,
-  .inline-wall[data-version="v1"] .wall-body .consent { justify-content: center; }
-  .inline-wall[data-version="v1"] .wall-body .wall-alt { text-align: center; }
+  .inline-wall[data-version="v4"] .wall-body { text-align: center; }
+  .inline-wall[data-version="v4"] .wall-head { justify-content: center; }
+  .inline-wall[data-version="v4"] .wall-body .lede { text-align: center; }
+  .inline-wall[data-version="v4"] .wall-form { max-width: 340px; margin-inline: auto; text-align: center; }
+  .inline-wall[data-version="v4"] .wall-body .err-msg,
+  .inline-wall[data-version="v4"] .wall-body .consent { justify-content: center; }
+  .inline-wall[data-version="v4"] .wall-body .wall-alt { text-align: center; }
   .login .sheet-close { background: transparent; border: 0; box-shadow: none; color: #fff; }
   .login .sheet-close:focus-visible { outline-color: #fff; }
   .dock { padding: 8px 6px; gap: 4px; }
