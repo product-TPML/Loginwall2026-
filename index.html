@@ -227,10 +227,8 @@
   .phone-row input, .text-field input { border: 0; outline: 0; font: inherit; font-size: 16px; padding: 13px 14px; width: 100%; background: #fff; }
   .text-field { border: 1px solid var(--border); border-radius: 9px; overflow: hidden; }
   .text-field.err { border-color: #e23; }
-  /* Always laid out (reserves its space) and only toggles visibility, so showing an error
-     never changes the card height — no sudden jump in the popup / bottom sheet. */
-  .err-msg { display: flex; visibility: hidden; align-items: center; gap: 7px; background: #fff2f2; color: #d33; font-size: 13px; padding: 9px 12px; border-radius: 8px; margin-top: 10px; }
-  .err-msg.show { visibility: visible; }
+  .err-msg { display: none; align-items: center; gap: 7px; background: #fff2f2; color: #d33; font-size: 13px; padding: 9px 12px; border-radius: 8px; margin-top: 10px; }
+  .err-msg.show { display: flex; }
 
   .continue { width: 100%; margin-top: 16px; background: var(--brand-dark); color: #fff; border: 0; border-radius: 9px; padding: 14px; font: inherit; font-weight: 700; font-size: 16px; cursor: pointer; }
   .continue:hover { filter: brightness(1.05); }
@@ -456,7 +454,6 @@
             <span data-i18n="send_otp_arrow">Get OTP</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
           </button>
-          <p class="wall-alt"><span data-i18n="already_member">Already a member?</span> <a id="nudgeLogin" role="button" tabindex="0" data-i18n="login">Log in</a></p>
           <div class="or"><span data-i18n="other_ways">other ways to log in</span></div>
           <div class="socials">
             <button class="soc-btn" id="wallGoogle">
@@ -590,6 +587,6 @@
     <span id="toastMsg">You're logged in. Enjoy unlimited access!</span>
   </div>
 
-<script src="prototype.js?v=20261120-1"></script>
+<script src="prototype.js?v=20261120-2"></script>
 </body>
 </html>

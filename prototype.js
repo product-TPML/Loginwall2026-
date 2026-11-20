@@ -333,7 +333,7 @@
   $('versionSeg').onclick = e => { const b = e.target.closest('[data-version]'); if (b) { state.version = b.dataset.version; render(); } };
   $('nextBtn').onclick = next;
   $('relatedGrid').onclick = e => { if (e.target.closest('[data-next]')) next(); };
-  const loginSources = { counterLogin: 'ctx_wall', headerLogin: null, nudgeLogin: 'ctx_wall', wallLogin: 'ctx_wall' };
+  const loginSources = { counterLogin: 'ctx_wall', headerLogin: null, wallLogin: 'ctx_wall' };
   Object.keys(loginSources).forEach(id => $(id).onclick = () => login(loginSources[id]));
   // Inline phone capture on the article-4 wall -> opens the focused modal straight on the OTP step.
   function openOtpStep(method, value, target) {
