@@ -194,6 +194,18 @@ body[data-brand="pv"] .inline-wall[data-version="v2"] .illo-back img { width: 96
 .inline-wall[data-version="v4"] h2 { text-align: center; }
 .inline-wall[data-version="v4"] .wall-body .lede { margin: 0 auto 18px; text-align: center; max-width: 440px; }
 .inline-wall[data-version="v4"] .wall-form { text-align: left; }
+/* v5 — Google first, then mobile, then email */
+.btn-google, .or-mobile { display: none; }
+.inline-wall[data-version="v5"] .btn-google { display: inline-flex; margin-top: 0; background: #fff; color: #1f2937; border: 1px solid #d0d5dd; }
+.inline-wall[data-version="v5"] .btn-google:hover { filter: none; background: #f6f7f9; }
+.inline-wall[data-version="v5"] .or-mobile { display: flex; margin: 16px 0 14px; }
+.inline-wall[data-version="v5"] #wallGoogle, .inline-wall[data-version="v5"] .socials .secondary-divider { display: none; }
+/* v5 inside the login modal: Google first, then mobile, then email */
+#googlePrimaryBtn { margin-top: 0; background: #fff; color: #1f2937; border: 1px solid #d0d5dd; align-items: center; justify-content: center; gap: 10px; }
+#googlePrimaryBtn:hover { filter: none; background: #f6f7f9; }
+#loginOverlay[data-version="v5"] #googlePrimaryBtn { display: inline-flex; }
+#loginOverlay[data-version="v5"] .or-mobile { display: flex; margin: 16px 0 18px; }
+#loginOverlay[data-version="v5"] #googleBtn, #loginOverlay[data-version="v5"] .socials .secondary-divider { display: none; }
 .wall-logo { height: 32px; width: auto; display: block; margin: 0 0 16px; }
 /* logo + heading on one line, split by a divider (all versions) */
 .inline-wall .wall-head { display: flex; align-items: center; gap: 14px; margin: 0 0 18px; }

@@ -291,6 +291,7 @@
       <button data-version="v2" aria-pressed="false" title="Login button and benefits">V2</button>
       <button data-version="v3" aria-pressed="false" title="Login button without benefits">V3</button>
       <button data-version="v4" aria-pressed="false" title="Mobile number without benefits">V4</button>
+      <button data-version="v5" aria-pressed="false" title="Google first, then mobile and email">V5</button>
     </div>
     <button class="reset" id="resetBtn">↻ Restart</button><span class="stage-label" id="stageLabel"></span>
   </div>
@@ -408,6 +409,11 @@
         <p class="lede" id="wallLede"></p>
         <button class="btn-primary" id="wallLogin" data-i18n="login" hidden>Log in</button>
         <div class="wall-form">
+          <button class="btn-primary btn-google" id="wallGooglePrimary">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M23.766 12.276c0-.816-.066-1.636-.207-2.438H12.24v4.62h6.482a5.54 5.54 0 0 1-2.399 3.64v2.999h3.867c2.27-2.09 3.576-5.177 3.576-8.82Z" fill="#4285F4"/><path d="M12.24 24c3.236 0 5.966-1.062 7.955-2.897l-3.868-2.998c-1.075.732-2.464 1.146-4.083 1.146-3.13 0-5.785-2.112-6.737-4.952H1.516v3.091A12 12 0 0 0 12.24 24Z" fill="#34A853"/><path d="M5.503 14.3a7.19 7.19 0 0 1 0-4.595V6.615H1.516a12.01 12.01 0 0 0 0 10.776L5.503 14.3Z" fill="#FBBC04"/><path d="M12.24 4.75a6.52 6.52 0 0 1 4.603 1.799l3.426-3.426A11.54 11.54 0 0 0 12.24 0 12 12 0 0 0 1.516 6.615L5.503 9.706C6.45 6.862 9.109 4.75 12.24 4.75Z" fill="#EA4335"/></svg>
+            <span data-i18n="continue_google">Continue with Google</span>
+          </button>
+          <div class="or or-mobile"><span data-i18n="or_mobile">or use your mobile number</span></div>
           <label class="field-label" for="wallPhone" data-i18n="mobile_number">Mobile number</label>
           <div class="phone-row" id="wallPhoneRow">
             <div class="cc">🇮🇳 +91</div>
@@ -417,7 +423,6 @@
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#d33" stroke-width="2"/><path d="M12 7v6" stroke="#d33" stroke-width="2"/><circle cx="12" cy="16.5" r="1" fill="#d33"/></svg>
             <span data-i18n="err_phone">Enter a valid 10-digit mobile number</span>
           </div>
-          <label class="consent"><input type="checkbox" class="js-consent" checked /> <span data-i18n="consent">Receive information on our products and ways to support and enjoy our journalism.</span></label>
           <button class="btn-primary" id="wallSendOtp">
             <span data-i18n="send_otp_arrow">Get OTP</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
@@ -477,6 +482,11 @@
 
           <!-- STEP: enter identifier -->
           <div id="stepEnter">
+            <button class="continue btn-google" id="googlePrimaryBtn">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M23.766 12.276c0-.816-.066-1.636-.207-2.438H12.24v4.62h6.482a5.54 5.54 0 0 1-2.399 3.64v2.999h3.867c2.27-2.09 3.576-5.177 3.576-8.82Z" fill="#4285F4"/><path d="M12.24 24c3.236 0 5.966-1.062 7.955-2.897l-3.868-2.998c-1.075.732-2.464 1.146-4.083 1.146-3.13 0-5.785-2.112-6.737-4.952H1.516v3.091A12 12 0 0 0 12.24 24Z" fill="#34A853"/><path d="M5.503 14.3a7.19 7.19 0 0 1 0-4.595V6.615H1.516a12.01 12.01 0 0 0 0 10.776L5.503 14.3Z" fill="#FBBC04"/><path d="M12.24 4.75a6.52 6.52 0 0 1 4.603 1.799l3.426-3.426A11.54 11.54 0 0 0 12.24 0 12 12 0 0 0 1.516 6.615L5.503 9.706C6.45 6.862 9.109 4.75 12.24 4.75Z" fill="#EA4335"/></svg>
+              <span data-i18n="continue_google">Continue with Google</span>
+            </button>
+            <div class="or or-mobile"><span data-i18n="or_mobile">or use your mobile number</span></div>
             <div class="tabs">
               <button id="tabMobile" class="on">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="6" y="2" width="12" height="20" rx="2.5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="18" r="1" fill="currentColor"/></svg>
@@ -499,7 +509,6 @@
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#d33" stroke-width="2"/><path d="M12 7v6" stroke="#d33" stroke-width="2"/><circle cx="12" cy="16.5" r="1" fill="#d33"/></svg>
                 <span data-i18n="err_phone">Enter a valid 10-digit mobile number</span>
               </div>
-              <label class="consent"><input type="checkbox" class="js-consent" checked /> <span data-i18n="consent">Receive information on our products and ways to support and enjoy our journalism.</span></label>
               <button class="continue" id="sendOtp" data-i18n="send_otp">Send OTP</button>
               <div class="hint" data-i18n="otp_hint">We'll text you a 6-digit code to verify your number.</div>
             </div>
@@ -512,7 +521,6 @@
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#d33" stroke-width="2"/><path d="M12 7v6" stroke="#d33" stroke-width="2"/><circle cx="12" cy="16.5" r="1" fill="#d33"/></svg>
                 <span data-i18n="err_email">Enter a valid email address</span>
               </div>
-              <label class="consent"><input type="checkbox" class="js-consent" checked /> <span data-i18n="consent">Receive information on our products and ways to support and enjoy our journalism.</span></label>
               <button class="continue" id="emailContinue" data-i18n="send_code">Send verification code</button>
             </div>
 

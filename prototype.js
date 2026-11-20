@@ -22,7 +22,7 @@
       nav_home: 'Home', nav_india: 'India', nav_karnataka: 'Karnataka', nav_opinion: 'Opinion', nav_sports: 'Sports', nav_business: 'Business', nav_ent: 'Entertainment',
       login: 'Log in', my_account: 'My account ✓', email: 'Email',
       counter_tail: 'Log in for unlimited access', counter_close: 'Dismiss article counter',
-      counter_left: 'articles left', counter_left1: 'article left',
+      counter_left: 'articles left', counter_left1: 'article left', counter_last: 'This is your last free article',
       crumbs: 'Home › Sports › <b>Cricket</b>',
       deck: 'A new captain. A new generation. India’s young squad looks ahead to its next chapter.',
       byline: 'By Sidney Kiran &nbsp;·&nbsp; Updated 03 Nov 2026, 09:38 IST',
@@ -32,6 +32,7 @@
       wall_lede_login: 'You’ve read your {n} free articles. Log in to keep reading {brand} — free.',
       mobile_number: 'Mobile number', ph_mobile: 'Enter mobile number', err_phone: 'Enter a valid 10-digit mobile number',
       send_otp_arrow: 'Get OTP', send_otp: 'Send OTP', already_member: 'Already a member?',
+      continue_google: 'Continue with Google', or_mobile: 'or use your mobile number',
       wall_hint: 'We’ll text a one-time code — no password, no spam.',
       perks_head: 'What You\'ll Get:', perks: ['Unlimited free articles', 'Join the conversation', 'Newsletters for you'],
       keep_reading: 'Keep reading', next_read: 'Read next article →', next_locked: 'Log in to keep reading →',
@@ -66,7 +67,7 @@
       nav_home: 'ಮುಖಪುಟ', nav_india: 'ಭಾರತ', nav_karnataka: 'ಕರ್ನಾಟಕ', nav_opinion: 'ಅಭಿಪ್ರಾಯ', nav_sports: 'ಕ್ರೀಡೆ', nav_business: 'ವಾಣಿಜ್ಯ', nav_ent: 'ಮನರಂಜನೆ',
       login: 'ಲಾಗಿನ್', my_account: 'ನನ್ನ ಖಾತೆ ✓', email: 'ಇಮೇಲ್',
       counter_tail: 'ಅನಿಯಮಿತ ಓದಿಗೆ ಲಾಗಿನ್ ಮಾಡಿ', counter_close: 'ಲೇಖನ ಎಣಿಕೆ ಮುಚ್ಚಿ',
-      counter_left: 'ಲೇಖನಗಳು ಉಳಿದಿವೆ', counter_left1: 'ಲೇಖನ ಉಳಿದಿದೆ',
+      counter_left: 'ಲೇಖನಗಳು ಉಳಿದಿವೆ', counter_left1: 'ಲೇಖನ ಉಳಿದಿದೆ', counter_last: 'ಇದು ನಿಮ್ಮ ಕೊನೆಯ ಉಚಿತ ಲೇಖನ',
       crumbs: 'ಮುಖಪುಟ › ಕ್ರೀಡೆ › <b>ಕ್ರಿಕೆಟ್</b>',
       deck: 'ಹೊಸ ನಾಯಕ. ಹೊಸ ಪೀಳಿಗೆ. ಭಾರತದ ಯುವ ತಂಡ ಮುಂದಿನ ಅಧ್ಯಾಯದತ್ತ ದೃಷ್ಟಿ ನೆಟ್ಟಿದೆ.',
       byline: 'ಸಿಡ್ನಿ ಕಿರಣ್ ಅವರಿಂದ &nbsp;·&nbsp; ನವೀಕರಣ 03 ನವೆಂ 2026, 09:38 IST',
@@ -76,6 +77,7 @@
       wall_lede_login: 'ನೀವು ನಿಮ್ಮ {n} ಉಚಿತ ಲೇಖನಗಳನ್ನು ಓದಿದ್ದೀರಿ. {brand} ಓದುವುದನ್ನು ಮುಂದುವರಿಸಲು ಲಾಗಿನ್ ಮಾಡಿ — ಉಚಿತ.',
       mobile_number: 'ಮೊಬೈಲ್ ಸಂಖ್ಯೆ', ph_mobile: 'ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ', err_phone: 'ಮಾನ್ಯವಾದ 10-ಅಂಕಿಯ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ',
       send_otp_arrow: 'OTP ಪಡೆಯಿರಿ', send_otp: 'OTP ಕಳುಹಿಸಿ', already_member: 'ಈಗಾಗಲೇ ಸದಸ್ಯರೇ?',
+      continue_google: 'Google ಮೂಲಕ ಮುಂದುವರಿಯಿರಿ', or_mobile: 'ಅಥವಾ ನಿಮ್ಮ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ಬಳಸಿ',
       wall_hint: 'ಒಂದು-ಬಾರಿಯ ಕೋಡ್ ಕಳುಹಿಸುತ್ತೇವೆ — ಪಾಸ್‌ವರ್ಡ್ ಇಲ್ಲ, ಸ್ಪ್ಯಾಮ್ ಇಲ್ಲ.',
       perks_head: 'ನಿಮಗೆ ಸಿಗುವುದು:', perks: ['ಅನಿಯಮಿತ ಉಚಿತ ಲೇಖನಗಳು', 'ಚರ್ಚೆಯಲ್ಲಿ ಪಾಲ್ಗೊಳ್ಳಿ', 'ನಿಮಗಾಗಿ ಸುದ್ದಿಪತ್ರಗಳು'],
       keep_reading: 'ಓದುವುದನ್ನು ಮುಂದುವರಿಸಿ', next_read: 'ಮುಂದಿನ ಲೇಖನ ಓದಿ →', next_locked: 'ಓದಲು ಲಾಗಿನ್ ಮಾಡಿ →',
@@ -123,7 +125,8 @@
     document.body.dataset.brand = state.brand;
     document.body.dataset.theme = state.theme;
     $('articleWall').dataset.version = state.version;
-    const formVersion = state.version === 'v1' || state.version === 'v4'; // mobile-form versions
+    $('loginOverlay').dataset.version = state.version;
+    const formVersion = state.version === 'v1' || state.version === 'v4' || state.version === 'v5'; // mobile-form versions
     document.querySelectorAll('#versionSeg button').forEach(b => {
       const selected = b.dataset.version === state.version;
       b.classList.toggle('on', selected);
@@ -160,7 +163,7 @@
     $('headerLogin').disabled = state.signedIn;
     const remaining = Math.max(FREE_LIMIT - state.article, 0);
     const current = Math.min(state.article + 1, FREE_LIMIT); // which free read we're on (1-based)
-    $('counterCopy').textContent = `${remaining} ${remaining === 1 ? d.counter_left1 : d.counter_left}`;
+    $('counterCopy').textContent = remaining === 1 ? d.counter_last : `${remaining} ${d.counter_left}`;
     $('counterFill').style.width = (current / FREE_LIMIT * 100) + '%';
     $('counterBar').classList.toggle('last', remaining === 1);
     $('counterBar').classList.toggle('hide', state.signedIn || locked() || state.dismissed || !state.revealed);
@@ -338,6 +341,7 @@
     if (valid) withBusy($('wallSendOtp'), () => openOtpStep('mobile', number, '+91 ' + number.slice(0, 5) + ' ' + number.slice(5)));
   };
   $('wallGoogle').onclick = success;
+  $('wallGooglePrimary').onclick = success;
   $('wallEmail').onclick = () => { login('ctx_wall'); setMethod('email'); $('emailInput').focus(); };
   $('counterClose').onclick = () => { state.dismissed = true; render(); };
   $('loginClose').onclick = closeLogin;
@@ -430,8 +434,9 @@
   }
   $('verifyOtp').onclick = verify;
   $('googleBtn').onclick = success;
+  $('googlePrimaryBtn').onclick = success;
   function prefillDemo() { $('phoneInput').value = ''; $('emailInput').value = ''; $('wallPhone').value = ''; } // start empty; any 10-digit number and any 6-digit OTP are accepted
-  $('resetBtn').onclick = () => { state.article = 0; state.signedIn = false; state.dismissed = false; hideDialogs(); setMethod('mobile'); prefillDemo(); document.querySelectorAll('.js-consent').forEach(c => c.checked = true); $('toast').classList.remove('show'); window.scrollTo({ top: 0 }); armReveal(); render(); };
+  $('resetBtn').onclick = () => { state.article = 0; state.signedIn = false; state.dismissed = false; hideDialogs(); setMethod('mobile'); prefillDemo(); $('toast').classList.remove('show'); window.scrollTo({ top: 0 }); armReveal(); render(); };
   document.addEventListener('keydown', e => {
     if ((e.key === 'Enter' || e.key === ' ') && e.target.matches?.('a[role="button"]')) { e.preventDefault(); e.target.click(); return; }
     const dialog = document.querySelector('.overlay.show');
