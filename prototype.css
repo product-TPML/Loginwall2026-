@@ -231,6 +231,9 @@ body[data-brand="pv"] .inline-wall[data-version="v2"] .illo-back img { width: 96
 .inline-wall .field-label { color: #cbd3dc; }
 .inline-wall .phone-row { border-color: transparent; }
 .inline-wall .phone-row .cc { background: #eef2f4; }
+/* Validation error: hidden collapses to zero height; showing it grows the card (no reserved gap). */
+.err-msg { display: none; align-items: center; gap: 7px; background: #fff2f2; color: #d33; font-size: 13px; padding: 9px 12px; border-radius: 8px; margin-top: 10px; }
+.err-msg.show { display: flex; }
 .inline-wall .err-msg { text-align: left; }
 .inline-wall .btn-primary { width: 100%; max-width: none; margin-top: 12px; justify-content: center; }
 .inline-wall .wall-hint { margin: 10px 0 0; text-align: left; font-size: 11.5px; color: #8ea0ad; }

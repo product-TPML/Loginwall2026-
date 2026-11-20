@@ -227,8 +227,8 @@
   .phone-row input, .text-field input { border: 0; outline: 0; font: inherit; font-size: 16px; padding: 13px 14px; width: 100%; background: #fff; }
   .text-field { border: 1px solid var(--border); border-radius: 9px; overflow: hidden; }
   .text-field.err { border-color: #e23; }
-  .err-msg { display: none; align-items: center; gap: 7px; background: #fff2f2; color: #d33; font-size: 13px; padding: 9px 12px; border-radius: 8px; margin-top: 10px; }
-  .err-msg.show { display: flex; }
+  /* .err-msg styles live in prototype.css (cache-busted) so the show/hide behavior
+     is always delivered fresh and can't be pinned by a cached index.html. */
 
   .continue { width: 100%; margin-top: 16px; background: var(--brand-dark); color: #fff; border: 0; border-radius: 9px; padding: 14px; font: inherit; font-weight: 700; font-size: 16px; cursor: pointer; }
   .continue:hover { filter: brightness(1.05); }
@@ -295,7 +295,7 @@
     .nudge .handle { background: #d6dbe0; margin-top: -8px; margin-bottom: 14px; }
   }
 </style>
-<link rel="stylesheet" href="prototype.css?v=20261120-3" />
+<link rel="stylesheet" href="prototype.css?v=20261120-4" />
 </head>
 <body data-brand="dh" data-theme="dark">
 
