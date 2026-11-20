@@ -251,6 +251,7 @@ body[data-brand="pv"] .inline-wall[data-version="v2"] .illo-back img { width: 96
 .consent { display: flex; align-items: flex-start; gap: 9px; margin: 14px 0 2px; font-size: 12.5px; line-height: 1.5; color: var(--ink-2); text-align: left; cursor: pointer; }
 .consent input { flex: 0 0 auto; margin: 1px 0 0; width: 16px; height: 16px; accent-color: var(--brand); cursor: pointer; }
 .inline-wall .consent { color: currentColor; opacity: .88; }
+.inline-wall[data-version="v5"] .consent, #loginOverlay[data-version="v5"] .consent { display: none; }
 /* OTP recovery actions — legible, not faint grey */
 #otpEdit, #resendLink:not(:disabled) { color: var(--brand); font-weight: 700; }
 #otpEdit:hover, #resendLink:not(:disabled):hover { text-decoration: underline; color: var(--brand); }

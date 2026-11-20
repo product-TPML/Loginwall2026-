@@ -436,7 +436,7 @@
   $('googleBtn').onclick = success;
   $('googlePrimaryBtn').onclick = success;
   function prefillDemo() { $('phoneInput').value = ''; $('emailInput').value = ''; $('wallPhone').value = ''; } // start empty; any 10-digit number and any 6-digit OTP are accepted
-  $('resetBtn').onclick = () => { state.article = 0; state.signedIn = false; state.dismissed = false; hideDialogs(); setMethod('mobile'); prefillDemo(); $('toast').classList.remove('show'); window.scrollTo({ top: 0 }); armReveal(); render(); };
+  $('resetBtn').onclick = () => { state.article = 0; state.signedIn = false; state.dismissed = false; hideDialogs(); setMethod('mobile'); prefillDemo(); document.querySelectorAll('.js-consent').forEach(c => c.checked = true); $('toast').classList.remove('show'); window.scrollTo({ top: 0 }); armReveal(); render(); };
   document.addEventListener('keydown', e => {
     if ((e.key === 'Enter' || e.key === ' ') && e.target.matches?.('a[role="button"]')) { e.preventDefault(); e.target.click(); return; }
     const dialog = document.querySelector('.overlay.show');
